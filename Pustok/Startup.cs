@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Pustok.Models;
+using Pustok.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +33,7 @@ namespace Pustok
             {
                 opt.UseSqlServer(Configuration.GetConnectionString("Default"));
             });
+            services.AddScoped<LayoutService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -21,5 +21,7 @@ namespace Pustok.Models
         public DbSet<BookTag> BookTags { get; set; }
         public DbSet<PromotionOne> PromotionOnes { get; set; }
         public DbSet<Image> Images { get; set; }
+        public DbSet<Setting> Settings { get; set; }
+        public DbSet<SocialMedia> SocialMedias { get; set; }
     }
 }

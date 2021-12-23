@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace Pustok.ViewModels
 {
-    public class CheckOutViewModel
+    public class FooterViewModel
     {
-        public Book Book { get; set; }
-        public int Count { get; set; }
-        public decimal TotalAmount { get; set; }
+        public List<SocialMedia> SocialMedias { get; set; }
     }
 }

@@ -50,7 +50,8 @@ namespace Pustok.Controllers
             var bookidstr = JsonConvert.SerializeObject(basketitems);
             HttpContext.Response.Cookies.Append("basketitemlist", bookidstr);
 
-            return Ok();
+            var data = _getbasketitems(basketitems);
+            return Ok(data);
         }
         public IActionResult ShowBook()
         {
@@ -87,6 +88,27 @@ namespace Pustok.Controllers
                 }
             }
             return View(checkoutitems);
+        }
+
+        private List<CheckOutViewModel> _getbasketitems(List<BasketItemViewModel> basketitems)
+        {
+
+            List<CheckOutViewModel> checkoutitems = new List<CheckOutViewModel>();
+
+            string basketitemsstr = HttpContext.Request.Cookies["basketitemlist"];
+
+                foreach (var item in basketitems)
+                {
+                    CheckOutViewModel checkOutitem = new CheckOutViewModel
+                    {
+                        Book = _context.Books.FirstOrDefault(x => x.Id == item.BookId),
+                        Count = item.Count
+                    };
+
+                    checkoutitems.Add(checkOutitem);
+                }
+
+            return checkoutitems;
         }
     }
 }

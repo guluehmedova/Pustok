@@ -123,7 +123,6 @@ C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\bin\Debug\netcoreapp
 C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.0\System.Runtime.Caching.dll
 C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.0\System.Runtime.Caching.dll
 C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
-C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\obj\Debug\netcoreapp3.1\Pustok.csproj.AssemblyReference.cache
 C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\obj\Debug\netcoreapp3.1\Pustok.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\obj\Debug\netcoreapp3.1\Pustok.AssemblyInfoInputs.cache
 C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\obj\Debug\netcoreapp3.1\Pustok.AssemblyInfo.cs
@@ -152,3 +151,6 @@ C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\obj\Debug\netcoreapp
 C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\obj\Debug\netcoreapp3.1\Pustok.pdb
 C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\obj\Debug\netcoreapp3.1\Pustok.genruntimeconfig.cache
 C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\obj\Debug\netcoreapp3.1\Razor\Views\Book\CheckOut.cshtml.g.cs
+C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\obj\Debug\netcoreapp3.1\Razor\Views\Shared\Components\Header\Default.cshtml.g.cs
+C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\obj\Debug\netcoreapp3.1\Pustok.csproj.AssemblyReference.cache
+C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\obj\Debug\netcoreapp3.1\Razor\Views\Shared\Components\Footer\Default.cshtml.g.cs
