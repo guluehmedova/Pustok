@@ -152,5 +152,14 @@ C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\obj\Debug\netcoreapp
 C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\obj\Debug\netcoreapp3.1\Pustok.genruntimeconfig.cache
 C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\obj\Debug\netcoreapp3.1\Razor\Views\Book\CheckOut.cshtml.g.cs
 C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\obj\Debug\netcoreapp3.1\Razor\Views\Shared\Components\Header\Default.cshtml.g.cs
-C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\obj\Debug\netcoreapp3.1\Pustok.csproj.AssemblyReference.cache
 C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\obj\Debug\netcoreapp3.1\Razor\Views\Shared\Components\Footer\Default.cshtml.g.cs
+C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\obj\Debug\netcoreapp3.1\Razor\Areas\Manage\Views\Dashboard\Index.cshtml.g.cs
+C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\obj\Debug\netcoreapp3.1\Razor\Areas\Manage\Views\Shared\_Layout.cshtml.g.cs
+C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\obj\Debug\netcoreapp3.1\Razor\Areas\Manage\Views\_ViewImports.cshtml.g.cs
+C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\obj\Debug\netcoreapp3.1\Razor\Areas\Manage\Views\_ViewStart.cshtml.g.cs
+C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\obj\Debug\netcoreapp3.1\Razor\Areas\Manage\Views\Genre\Index.cshtml.g.cs
+C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\obj\Debug\netcoreapp3.1\Razor\Areas\Manage\Views\Genre\Create.cshtml.g.cs
+C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\obj\Debug\netcoreapp3.1\Razor\Areas\Manage\Views\Book\Index.cshtml.g.cs
+C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\obj\Debug\netcoreapp3.1\Razor\Areas\Manage\Views\Book\Create.cshtml.g.cs
+C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\obj\Debug\netcoreapp3.1\Razor\Areas\Manage\Views\Author\Index.cshtml.g.cs
+C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\obj\Debug\netcoreapp3.1\Razor\Areas\Manage\Views\Author\Create.cshtml.g.cs

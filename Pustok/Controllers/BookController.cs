@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Pustok.Models;
 using Pustok.ViewModels;
@@ -6,109 +7,131 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static Pustok.ViewModels.BasketViewModel;
 
 namespace Pustok.Controllers
 {
-    public class BookController:Controller
+    public class BookController : Controller
     {
         private PustokContext _context;
         public BookController(PustokContext pustokContext)
         {
             _context = pustokContext;
         }
-        public IActionResult AddBook(int id)
+        public IActionResult AddBasket(int bookId)
         {
-            Book book = _context.Books.FirstOrDefault(x => x.Id == id);
-            if (book ==null)
+            #region olmayan bir kitab elave edile biler-ona gorede bu yoxlamani aparmaliyiq
+            if (!_context.Books.Any(x => x.Id == bookId))
             {
                 return NotFound();
             }
-            List<BasketItemViewModel> basketitems = new List<BasketItemViewModel>();
-            string IsBasketItemExcist = HttpContext.Request.Cookies["basketitemlist"];
-
-            if(IsBasketItemExcist!=null)
+            #endregion
+            List<CookieBasketItemViewModel> basketItems = new List<CookieBasketItemViewModel>();
+            string existBasketItems = HttpContext.Request.Cookies["basketItemList"];
+            if (existBasketItems != null)
             {
-                basketitems = JsonConvert.DeserializeObject < List < BasketItemViewModel >> (IsBasketItemExcist);
+                basketItems = JsonConvert.DeserializeObject<List<CookieBasketItemViewModel>>(existBasketItems);
+
             }
-
-            BasketItemViewModel item = basketitems.FirstOrDefault(x => x.BookId == id);
-
-            if(item == null)
+            CookieBasketItemViewModel item = basketItems.FirstOrDefault(x => x.BookId == bookId);
+            if (item == null)
             {
-                item = new BasketItemViewModel
+                item = new CookieBasketItemViewModel
                 {
-                    BookId = id,
+                    BookId = bookId,
                     Count = 1
                 };
-                basketitems.Add(item);
+                basketItems.Add(item);
             }
             else
             {
                 item.Count++;
             }
+            var bookIdStr = JsonConvert.SerializeObject(basketItems);
+            HttpContext.Response.Cookies.Append("basketItemList", bookIdStr);
 
-            var bookidstr = JsonConvert.SerializeObject(basketitems);
-            HttpContext.Response.Cookies.Append("basketitemlist", bookidstr);
-
-            var data = _getbasketitems(basketitems);
+            var data = _getBasketItems(basketItems);
             return Ok(data);
         }
-        public IActionResult ShowBook()
+        public IActionResult ShowBasket()
         {
-            var bookidstr = HttpContext.Request.Cookies["basketitemlist"];
-            List<BasketItemViewModel> bookids = new List<BasketItemViewModel>();
-
-            if(bookidstr != null)
+            var bookIdStr = HttpContext.Request.Cookies["basketItemList"];
+            List<CookieBasketItemViewModel> bookIds = new List<CookieBasketItemViewModel>();
+            if (bookIdStr != null)
             {
-                bookids = JsonConvert.DeserializeObject<List<BasketItemViewModel>>(bookidstr);
+                bookIds = JsonConvert.DeserializeObject<List<CookieBasketItemViewModel>>(bookIdStr);
             }
-
-            return Ok();
+            return Json(bookIds);
         }
-
+        #region CheckOut sehifesi
         public IActionResult CheckOut()
         {
-            List<CheckOutViewModel> checkoutitems = new List<CheckOutViewModel>();
-
-            string basketitemsstr = HttpContext.Request.Cookies["basketitemlist"];
-
-            if (basketitemsstr!=null)
+            List<CheckOutViewModel> checkoutItems = new List<CheckOutViewModel>();
+            string basketItemsStr = HttpContext.Request.Cookies["basketItemList"];
+            if (basketItemsStr != null)
             {
-                List<BasketItemViewModel> basketitems = JsonConvert.DeserializeObject<List<BasketItemViewModel>>(basketitemsstr);
-
-                foreach (var item in basketitems)
+                List<CheckOutViewModel> basketItems = JsonConvert.DeserializeObject<List<CheckOutViewModel>>(basketItemsStr);
+                //burda eger cookide itemler yoxdursa bos list qaytaracaq, yox eger varsa
+                //hemin cookideki itemleri checkoutviewmodel listi duzeldib qaytarcaq
+                foreach (var item in basketItems)
                 {
-                    CheckOutViewModel checkOutitem = new CheckOutViewModel
+                    CheckOutViewModel checkoutitem = new CheckOutViewModel
                     {
-                        Book = _context.Books.FirstOrDefault(x => x.Id == item.BookId),
+                        Book = _context.Books.FirstOrDefault(x => x.Id == item.Id),
                         Count = item.Count
                     };
-
-                    checkoutitems.Add(checkOutitem);
+                    checkoutItems.Add(checkoutitem);
                 }
             }
-            return View(checkoutitems);
+            return View();
         }
+        #endregion
 
-        private List<CheckOutViewModel> _getbasketitems(List<BasketItemViewModel> basketitems)
+        #region Kitablari sebete elave edende melumatlarin viewcarda ekave etmek hissesi
+        private BasketViewModel _getBasketItems(List<CookieBasketItemViewModel> cookiebasketItems)
         {
-
-            List<CheckOutViewModel> checkoutitems = new List<CheckOutViewModel>();
-
-            string basketitemsstr = HttpContext.Request.Cookies["basketitemlist"];
-
-                foreach (var item in basketitems)
+            BasketViewModel basket = new BasketViewModel
+            {
+                BasketItems = new List<BasketItemViewModel>(),
+            };
+            foreach (var item in cookiebasketItems) 
+            {
+                Book book = _context.Books.Include(x=>x.BookImages).FirstOrDefault(x => x.Id == item.BookId);
+                BasketItemViewModel basketItem = new BasketItemViewModel
                 {
-                    CheckOutViewModel checkOutitem = new CheckOutViewModel
-                    {
-                        Book = _context.Books.FirstOrDefault(x => x.Id == item.BookId),
-                        Count = item.Count
-                    };
+                    Name = book.Name,
+                    Price = book.DiscountPercent > 0 ? (book.SalePrice * (1 - book.DiscountPercent / 100)) : book.SalePrice,
+                    BookId = book.Id,
+                    Count = item.Count,
+                    PosterImage = book.BookImages.FirstOrDefault(x => x.PosterStatus == true)?.Image,
+                };
 
-                    checkoutitems.Add(checkOutitem);
-                }
+                basketItem.TotalPrice = basketItem.Count * basketItem.Price;
+                basket.TotalAmount += basketItem.TotalPrice;
+                basket.BasketItems.Add(basketItem);
+            }
 
-            return checkoutitems;
+            return basket;
         }
+        #endregion
+
+        #region DeleteItemFromBasket
+        //public IActionResult Delete(int id)
+        //{
+        //    var basketIdStr = HttpContext.Request.Cookies["basketItemList"];
+        //    if (basketIdStr != null)
+        //    {
+        //        List<CookieBasketItemViewModel> basketIds = JsonConvert.DeserializeObject<List<CookieBasketItemViewModel>>(basketIdStr);
+        //        foreach (var item in basketIds)
+        //        {
+        //            if (item.BookId == id)
+        //            {
+                        
+        //            }
+        //        }
+        //    }
+        //    return View();
+        //}
+        #endregion
     }
 }

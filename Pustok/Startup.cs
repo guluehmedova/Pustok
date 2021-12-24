@@ -57,7 +57,14 @@ namespace Pustok
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
+                endpoints.MapControllerRoute
+             (
+                 name: "Area",
+                 pattern: "{area:exists}/{controller=dashboard}/{action=index}/{id?}"
+             );
+
+                endpoints.MapControllerRoute
+            (
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });

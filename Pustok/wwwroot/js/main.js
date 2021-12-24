@@ -13,18 +13,18 @@
         $("#detailModal").modal("show")
     })
 
-
     $(document).on("click", ".add-basket", function (e) {
         e.preventDefault();
-        console.log("baskete basildi")
-        let url = $(this).attr("href")
+
+        let url = $(this).attr("href");
         fetch(url)
-            .then(response => response.text())
+            .then(response => response.json())
             .then(data => {
-                $(".card-total .text-number").text(data.length);
-                $(`#cardproducts`).html("");
-                for (var i = 0; i < data.length; i++) {
-                    console.log("for icindeyem")
+                $(".cart-total .text-number").text(data.basketItems.length);
+                $(".cart-total .price").text("£" + data.totalAmount)
+                $("#card-products").html("");
+                for (var i = 0; i < data.basketItems.length; i++) {
+                    console.log("for un icindeyem")
                     let elem = `<div class="cart-product">
                                                     <a href="product-details.html" class="image">
                                                         <img src="/image/products/`+ data.basketItems[i].posterImage + `" alt="">
@@ -39,9 +39,10 @@
                                                         <button class="cross-btn"><i class="fas fa-times"></i></button>
                                                     </div>
                                                 </div>`
-                    $(`#cardproducts`).append($(elem))
+                    $("#card-products").append(elem);
                 }
             })
     })
-})
 
+
+})

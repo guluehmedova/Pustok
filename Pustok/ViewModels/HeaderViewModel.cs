@@ -10,5 +10,6 @@ namespace Pustok.ViewModels
     {
         public List<Setting> Settings { get; set; }
         public List<Genre> Genres { get; set; }
+        public BasketViewModel Basket { get; set; }
     }
 }

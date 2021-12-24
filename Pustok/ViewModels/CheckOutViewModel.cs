@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Pustok.ViewModels
 {
-    public class CheckOutViewModel
+    public class CheckOutViewModel:BaseEntity
     {
         public Book Book { get; set; }
         public int Count { get; set; }
