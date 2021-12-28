@@ -1,0 +1,27 @@
+﻿@model Setting
+@{
+    ViewData["Title"] = "Create";
+}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <form method="post" asp-action="create">
+                <div class="form-group">
+                    <label asp-for="Key">Key</label>
+                    <input class="form-control" asp-for="Key" placeholder="Enter Setting Key">
+
+                    <label asp-for="Value">Value</label>
+                    <input class="form-control" asp-for="Value" placeholder="Enter Setting Value">
+                </div>
+                <button type="submit" class="btn btn-primary">Create</button>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    @await Html.PartialAsync("_ValidationPartialView")
+}

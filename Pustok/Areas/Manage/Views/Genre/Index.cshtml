@@ -1,7 +1,8 @@
 ﻿@model List<Genre>
 @{
     ViewData["Title"] = "Index";
-    var count = 0;
+    int count = (ViewBag.SelectedPage - 1) *8;
+    int totalpage = ViewBag.TotalPage;
 }
 <div class="container">
     <div class="row">
@@ -25,16 +26,30 @@
                         count++;
                         <tr>
                             <th scope="row">@count</th>
-                            <td colspan="2">@item.Name</td>
+                            <td  colspan="2">@item.Name</td>
                             <td>@item.Books.Count()</td>
                             <td>
-                                <a href="#" class="btn btn-danger">Edit</a>
-                                <a href="#" class="btn btn-danger">Delete</a>
+                                <a asp-action="edit" asp-route-id="@item.Id" class="btn btn-danger">Edit</a>
+                                <a data-id="@item.Id" data-x="genre" class="btn btn-danger delete-btn">Delete</a>
                             </td>
                         </tr>
                     }
                 </tbody>
             </table>
         </div>
+        <nav aria-label="Page navigation example ">
+            <ul class="pagination mx-auto">
+                <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                @for (int i = 1; i < totalpage; i++)
+                {
+                    <li class="page-item"><a class="page-link" asp-action="index" asp-route-page="@i">@i</a></li>
+                }
+                <li class="page-item"><a class="page-link" href="#">Next</a></li>
+            </ul>
+        </nav>
     </div>
 </div>
+@section Scripts
+{
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.all.min.js"></script>
+}

@@ -114,24 +114,5 @@ namespace Pustok.Controllers
             return basket;
         }
         #endregion
-
-        #region DeleteItemFromBasket
-        //public IActionResult Delete(int id)
-        //{
-        //    var basketIdStr = HttpContext.Request.Cookies["basketItemList"];
-        //    if (basketIdStr != null)
-        //    {
-        //        List<CookieBasketItemViewModel> basketIds = JsonConvert.DeserializeObject<List<CookieBasketItemViewModel>>(basketIdStr);
-        //        foreach (var item in basketIds)
-        //        {
-        //            if (item.BookId == id)
-        //            {
-                        
-        //            }
-        //        }
-        //    }
-        //    return View();
-        //}
-        #endregion
     }
 }

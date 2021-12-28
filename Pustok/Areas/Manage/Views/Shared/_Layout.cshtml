@@ -42,7 +42,7 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
-                <a class="nav-link" href="index.html">
+                <a class="nav-link" asp-action="index" asp-controller="dashboard">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span>
                 </a>
@@ -62,9 +62,12 @@
                 </a>
                 <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" asp-action="index" asp-controller="book" >Book</a>
-                        <a class="collapse-item" asp-action="index" asp-controller="genre" >Genre</a>
-                        <a class="collapse-item" asp-action="index" asp-controller="author" >Author</a>
+                        <a class="collapse-item" asp-action="index" asp-controller="book">Book</a>
+                        <a class="collapse-item" asp-action="index" asp-controller="genre">Genre</a>
+                        <a class="collapse-item" asp-action="index" asp-controller="author">Author</a>
+                        <a class="collapse-item" asp-action="index" asp-controller="feature">Feature</a>
+                        <a class="collapse-item" asp-action="index" asp-controller="setting">Setting</a>
+                        <a class="collapse-item" asp-action="index" asp-controller="tag">Tag</a>
                     </div>
                 </div>
             </li>
@@ -358,13 +361,9 @@
 
     <!-- Custom scripts for all pages-->
     <script src="~/manage/js/sb-admin-2.min.js"></script>
-
-    <!-- Page level plugins -->
-    <script src="~/manage/vendor/chart.js/Chart.min.js"></script>
-
-    <!-- Page level custom scripts -->
-    <script src="~/manage/js/demo/chart-area-demo.js"></script>
-    <script src="~/manage/js/demo/chart-pie-demo.js"></script>
+ 
+    <script src="~/manage/js/myjs.js"></script>
+    @RenderSection("Scripts", required: false);
 
 </body>
 

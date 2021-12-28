@@ -210,34 +210,37 @@
                             <div class="cart-block">
                                 <div class="cart-total">
                                     <span class="text-number">
-                                        @Model.Basket.BasketItems.Count();
+                                      @(Model.Basket== null?0 : Model.Basket.BasketItems.Count())
                                     </span>
                                     <span class="text-item">
                                         Shopping Cart
                                     </span>
                                     <span class="price">
-                                        £@Model.Basket.TotalAmount.ToString("0.00")
+                                        £@Model.Basket?.TotalAmount.ToString("0.00")
                                         <i class="fas fa-chevron-down"></i>
                                     </span>
                                 </div>
                                 <div class="cart-dropdown-block">
                                     <div class=" single-cart-block " id="card-products">
-                                        @foreach (var item in Model.Basket.BasketItems)
+                                        @if (Model.Basket != null)
                                         {
-                                            <div class="cart-product">
-                                                <a href="product-details.html" class="image">
-                                                    <img src="/image/products/@item.PosterImage" alt="">
-                                                </a>
-                                                <div class="content">
-                                                    <h3 class="title">
-                                                        <a href="product-details.html">
-                                                         @item.Name
-                                                        </a>
-                                                    </h3>
-                                                    <p class="price"><span class="qty"> @item.Count ×</span> £ @item.Price.ToString("0.00")</p>
-                                                    <button class="cross-btn"><i class="fas fa-times"></i></button>
+                                            foreach (var item in Model.Basket.BasketItems)
+                                            {
+                                                <div class="cart-product">
+                                                    <a href="product-details.html" class="image">
+                                                        <img src="/image/products/@item.PosterImage" alt="">
+                                                    </a>
+                                                    <div class="content">
+                                                        <h3 class="title">
+                                                            <a href="product-details.html">
+                                                                @item.Name
+                                                            </a>
+                                                        </h3>
+                                                        <p class="price"><span class="qty"> @item.Count ×</span> £ @item.Price.ToString("0.00")</p>
+                                                        <button class="cross-btn"><i class="fas fa-times"></i></button>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            }
                                         }
                                     </div>
                                     <div class=" single-cart-block ">

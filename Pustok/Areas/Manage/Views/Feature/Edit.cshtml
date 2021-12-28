@@ -1,0 +1,29 @@
+﻿@model Feature
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <form method="post" asp-action="edit">
+                <div class="form-group">
+                    <label asp-for="Icon" class="form-label">Icon</label>
+                    <input class="form-control" asp-for="Icon">
+                    <span asp-validation-for="Icon"></span>
+
+                    <label asp-for="Text" class="form-label">Text</label>
+                    <input class="form-control" asp-for="Text">
+                    <span asp-validation-for="Text"></span>
+
+                    <label asp-for="Title" class="form-label">Title</label>
+                    <input class="form-control" asp-for="Title">
+                    <span asp-validation-for="Title"></span>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    @await Html.PartialAsync("_ValidationPartialView")
+}

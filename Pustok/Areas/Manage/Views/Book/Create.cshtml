@@ -1,4 +1,4 @@
-﻿
+﻿@model Book
 @{
     ViewData["Title"] = "Create";
 }
@@ -9,12 +9,35 @@
         <div class="col-lg-8 mx-auto">
             <form method="post" asp-action="create">
                 <div class="form-group">
-                    <label for="name">Name</label>
-                    <input type="text" class="form-control" name="name" id="name" placeholder="Enter Book name">
+                    <label asp-for="Name">Name</label>
+                    <input type="text" class="form-control" asp-for="Name" placeholder="Enter Book name">
+
+                    <label asp-for="Desc">Desc</label>
+                    <input type="text" class="form-control" asp-for="Desc" placeholder="Enter Book desc">
+
+                    <label asp-for="Code">code</label>
+                    <input type="text" class="form-control" asp-for="Code" placeholder="Enter Book code">
+
+                    <label asp-for="CostPrice">costprice</label>
+                    <input type="text" class="form-control" asp-for="CostPrice" placeholder="Enter Book CostPrice">
+
+                    <label asp-for="SalePrice">saleprice</label>
+                    <input type="text" class="form-control" asp-for="SalePrice" placeholder="Enter Book SalePrice">
+
+                    <label asp-for="DiscountPercent">DiscountPercent</label>
+                    <input type="text" class="form-control" asp-for="DiscountPercent" placeholder="Enter Book DiscountPercent">
+
+                    <label asp-for="GenreId">GenreId</label>
+                    <input type="text" class="form-control" asp-for="GenreId" placeholder="Enter Book GenreId">
+
+                    <label asp-for="AuthorId">AuthorId</label>
+                    <input type="text" class="form-control" asp-for="AuthorId" placeholder="Enter Book AuthorId">
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
         </div>
     </div>
 </div>
-
+@section Scripts{
+    @await Html.PartialAsync("_ValidationPartialView")
+}
