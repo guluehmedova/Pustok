@@ -22,7 +22,6 @@ namespace Pustok.ViewComponents
         {
             BasketViewModel basket = null;
             var basketItemStr = HttpContext.Request.Cookies["basketItemList"];
-
             if (basketItemStr !=null)
             {
                 List<CookieBasketItemViewModel> cookieItems = JsonConvert.DeserializeObject<List<CookieBasketItemViewModel>>(basketItemStr);

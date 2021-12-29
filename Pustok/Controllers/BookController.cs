@@ -20,18 +20,18 @@ namespace Pustok.Controllers
         }
         public IActionResult AddBasket(int bookId)
         {
-            #region olmayan bir kitab elave edile biler-ona gorede bu yoxlamani aparmaliyiq
+            #region movcud olmayan bir kitab elave edile biler-ona gorede bu yoxlamani aparmaliyiq
             if (!_context.Books.Any(x => x.Id == bookId))
             {
                 return NotFound();
             }
             #endregion
-            List<CookieBasketItemViewModel> basketItems = new List<CookieBasketItemViewModel>();
-            string existBasketItems = HttpContext.Request.Cookies["basketItemList"];
+            List<CookieBasketItemViewModel> basketItems = new List<CookieBasketItemViewModel>();//bidene bos list yaradiriq
+            string existBasketItems = HttpContext.Request.Cookies["basketItemList"];//cookiden gelen datani gotururuk
             if (existBasketItems != null)
             {
                 basketItems = JsonConvert.DeserializeObject<List<CookieBasketItemViewModel>>(existBasketItems);
-
+                //eger gelen data null-a beraber deyilse deserialize edib cookiebasketitemviewmodel cinsinden bir liste ceviririk
             }
             CookieBasketItemViewModel item = basketItems.FirstOrDefault(x => x.BookId == bookId);
             if (item == null)

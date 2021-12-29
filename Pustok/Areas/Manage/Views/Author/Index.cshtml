@@ -16,8 +16,9 @@
                 <thead>
                     <tr>
                         <th scope="col">#</th>
-                        <th scope="col">Name</th>
+                        <th scope="col">FullName</th>
                         <th scope="col">Book Count</th>
+                        <th scope="col">Image</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
@@ -27,8 +28,11 @@
                         count++;
                         <tr>
                             <th scope="row">@count</th>
-                            <td colspan="2">@item.FullName</td>
+                            <td >@item.FullName</td>
                             <td>@item.Books.Count()</td>
+                            <td>
+                                <img width="100" src="~/uploads/authors/@item.Image" />
+                            </td>
                             <td>
                                 <a asp-action="edit" asp-route-id="@item.Id" class="btn btn-danger">Edit</a>
                                 <a  class="btn btn-danger delete-btn">Delete</a>

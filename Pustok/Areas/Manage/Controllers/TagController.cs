@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace Pustok.Areas.Manage.Controllers
 {
+    [Area("manage")]
     public class TagController : Controller
     {
         private PustokContext _context;

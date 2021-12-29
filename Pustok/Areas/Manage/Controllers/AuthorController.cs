@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Pustok.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,9 +14,11 @@ namespace Pustok.Areas.Manage.Controllers
     public class AuthorController : Controller
     {
         private PustokContext _context;
-        public AuthorController(PustokContext context)
+        private IWebHostEnvironment _env;
+        public AuthorController(PustokContext context, IWebHostEnvironment env)
         {
             _context = context;
+            _env = env;
         }
         public IActionResult Index(int page=1)
         {
@@ -30,6 +34,34 @@ namespace Pustok.Areas.Manage.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Author author)
         {
+            if (author.ImageFile == null)
+            {
+                ModelState.AddModelError("ImageFile", "Image is required");
+            }
+            else if (author.ImageFile.FileName.Length > 2097152)
+            {
+                ModelState.AddModelError("ImageFile", "Max size is 2MB");
+            }
+            else if (author.ImageFile.ContentType != "image/png" && author.ImageFile.ContentType != "image/jpeg")
+            {
+                ModelState.AddModelError("ImageFile", "ContentType is not correct");
+            }
+
+            string filename = author.ImageFile.FileName.Length <= 64 ? author.ImageFile.FileName : (author.ImageFile.FileName.Substring(author.ImageFile.FileName.Length - 64, 64));
+            filename = Guid.NewGuid().ToString() + filename;
+            string path = Path.Combine(_env.WebRootPath, "uploads/authors", filename);
+
+            using (FileStream stream = new FileStream(path, FileMode.Create))
+            {
+                author.ImageFile.CopyTo(stream);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
+            author.Image = filename;
             _context.Authors.Add(author);
             _context.SaveChanges();
             return RedirectToAction("index");

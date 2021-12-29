@@ -3,8 +3,6 @@
         e.preventDefault();
         console.log("salam")
         let url = $(this).attr("href")
-        let datax = $(this).attr("data-x")
-        let id = $(this).attr("data-id")
         Swal.fire({
             title: 'Are you sure?',
             text: "You won't be able to revert this!",
@@ -15,11 +13,14 @@
             confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
             if (result.isConfirmed) {
-                fetch(url)
-                    .then(response => response.json())
-                    .then(data => {
-                        
-                    })
+                fetch(url).then(response => {
+                    if (response.ok) {
+                        window.location.reload(true)
+                    }
+                    else {
+                        alert("what is going on here")
+                    }
+                })
             }
             else {
 

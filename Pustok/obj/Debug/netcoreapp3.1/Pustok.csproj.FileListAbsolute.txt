@@ -182,4 +182,8 @@ C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\obj\Debug\netcoreapp
 C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\obj\Debug\netcoreapp3.1\Razor\Areas\Manage\Views\Tag\Create.cshtml.g.cs
 C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\obj\Debug\netcoreapp3.1\Razor\Areas\Manage\Views\Tag\Edit.cshtml.g.cs
 C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\obj\Debug\netcoreapp3.1\Razor\Areas\Manage\Views\Tag\Delete.cshtml.g.cs
+C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\obj\Debug\netcoreapp3.1\Razor\Areas\Manage\Views\Slider\Index.cshtml.g.cs
+C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\obj\Debug\netcoreapp3.1\Razor\Areas\Manage\Views\Slider\Create.cshtml.g.cs
+C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\obj\Debug\netcoreapp3.1\Razor\Areas\Manage\Views\Slider\Delete.cshtml.g.cs
 C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\obj\Debug\netcoreapp3.1\Pustok.csproj.AssemblyReference.cache
+C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\obj\Debug\netcoreapp3.1\Razor\Areas\Manage\Views\Slider\Edit.cshtml.g.cs
