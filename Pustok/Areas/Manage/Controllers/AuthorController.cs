@@ -90,6 +90,35 @@ namespace Pustok.Areas.Manage.Controllers
                 return NotFound();
             }
 
+            string oldpath = Path.Combine(_env.WebRootPath, "uploads/authors", excistauthor.Image);
+
+            if (System.IO.File.Exists(oldpath))
+            {
+                System.IO.File.Delete(oldpath);
+            }
+
+            if (author.ImageFile != null)
+            {
+                if (author.ImageFile.Length > 2097152)
+                {
+                    ModelState.AddModelError("ImageFile", "Max size 2mb");
+                }
+                else if (author.ImageFile.ContentType != "image/jpeg" && author.ImageFile.ContentType != "image/png")
+                {
+                    ModelState.AddModelError("ImageFile", "Contenttype is not true");
+                }
+
+                string filename = author.ImageFile.FileName.Length <= 64 ? author.ImageFile.FileName : author.ImageFile.FileName.Substring(author.ImageFile.FileName.Length - 64, 64);
+                filename = Guid.NewGuid().ToString() + filename;
+                string newpath = Path.Combine(_env.WebRootPath, "uploads/authors", filename);
+
+                using (FileStream stream = new FileStream(newpath, FileMode.Create))
+                {
+                    author.ImageFile.CopyTo(stream);
+                }
+                excistauthor.Image = filename;
+            }
+
             excistauthor.FullName = author.FullName;
 
             _context.SaveChanges();
@@ -103,26 +132,20 @@ namespace Pustok.Areas.Manage.Controllers
             {
                 return NotFound();
             }
-            return View(author);
-        }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Delete(Author author)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View();
-            }
-            Author excistauthor = _context.Authors.FirstOrDefault(x => x.Id == author.Id);
 
-            if (excistauthor == null)
+            if (!string.IsNullOrWhiteSpace(author.Image))
             {
-                return NotFound();
+                string path = Path.Combine(_env.WebRootPath, "uploads/authors", author.Image);
+
+                if (System.IO.File.Exists(path))
+                {
+                    System.IO.File.Delete(path);
+                }
             }
 
-            excistauthor.FullName = author.FullName;
+            _context.Authors.Remove(author);
             _context.SaveChanges();
-            return RedirectToAction("index", "author");
+            return Ok();
         }
     }
 }

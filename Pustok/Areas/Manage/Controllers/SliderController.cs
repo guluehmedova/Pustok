@@ -65,12 +65,10 @@ namespace Pustok.Areas.Manage.Controllers
 
             return RedirectToAction("index", "slider");
         }
-
         public IActionResult Edit(int id)
         {
             if(!ModelState.IsValid) { return View(); }
             Slider slider = _context.Sliders.FirstOrDefault(x => x.Id == id);
-
             if (slider == null) {return NotFound();}
             return View(slider);
         }

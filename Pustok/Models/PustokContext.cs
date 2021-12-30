@@ -24,5 +24,7 @@ namespace Pustok.Models
         public DbSet<Image> Images { get; set; }
         public DbSet<Setting> Settings { get; set; }
         public DbSet<SocialMedia> SocialMedias { get; set; }
+        public DbSet<NewBookImage> NewBookImages { get; set; }
+
     }
 }

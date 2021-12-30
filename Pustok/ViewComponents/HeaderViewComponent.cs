@@ -44,14 +44,14 @@ namespace Pustok.ViewComponents
             };
             foreach (var item in cookiebasketItems)
             {
-                Book book = _context.Books.Include(x => x.BookImages).FirstOrDefault(x => x.Id == item.BookId);
+                Book book = _context.Books.Include(x => x.NewBookImages).FirstOrDefault(x => x.Id == item.BookId);
                 BasketItemViewModel basketItem = new BasketItemViewModel
                 {
                     Name = book.Name,
                     Price = book.DiscountPercent > 0 ? (book.SalePrice * (1 - book.DiscountPercent / 100)) : book.SalePrice,
                     BookId = book.Id,
                     Count = item.Count,
-                    PosterImage = book.BookImages.FirstOrDefault(x => x.PosterStatus == true)?.Image,
+                    PosterImage = book.NewBookImages.FirstOrDefault(x => x.PosterStatus == true)?.Image,
                 };
 
                 basketItem.TotalPrice = basketItem.Count * basketItem.Price;

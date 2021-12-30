@@ -26,20 +26,20 @@ namespace Pustok.Controllers
                 Features = _pustokContext.Features.ToList(),
                 Images=_pustokContext.Images.ToList(),
                 PromotionOnes = _pustokContext.PromotionOnes.ToList(),
-                FeaturedBooks = _pustokContext.Books.Include(x => x.Author).Include(x => x.BookImages).Where(x => x.IsFeatured).Take(20).ToList(),
-                DiscountedBooks = _pustokContext.Books.Include(x => x.Author).Include(x => x.BookImages).Where(x => x.DiscountPercent > 0).Take(20).ToList(),
-                NewBooks = _pustokContext.Books.Include(x => x.Author).Include(x => x.BookImages).Where(x => x.IsNew).Take(20).ToList()
+                FeaturedBooks = _pustokContext.Books.Include(x => x.Author).Include(x => x.NewBookImages).Where(x => x.IsFeatured).Take(20).ToList(),
+                DiscountedBooks = _pustokContext.Books.Include(x => x.Author).Include(x => x.NewBookImages).Where(x => x.DiscountPercent > 0).Take(20).ToList(),
+                NewBooks = _pustokContext.Books.Include(x => x.Author).Include(x => x.NewBookImages).Where(x => x.IsNew).Take(20).ToList()
             };
             return View(homeViewModel);
         }
         public IActionResult GetBook(int id)
         {
-            Book book = _pustokContext.Books.Include(x => x.Genre).Include(x=>x.BookTags).ThenInclude(bt=>bt.Tag).Include(x => x.BookImages).FirstOrDefault(x => x.Id == id);
+            Book book = _pustokContext.Books.Include(x => x.Genre).Include(x=>x.BookTags).ThenInclude(bt=>bt.Tag).Include(x => x.NewBookImages).FirstOrDefault(x => x.Id == id);
             return PartialView("_ModalBookDetail", book);
         }
         public IActionResult Detail(int id)
         {
-            Book book = _pustokContext.Books.Include(x => x.Genre).Include(x => x.BookImages).Include(x=>x.BookTags).FirstOrDefault(x => x.Id == id);
+            Book book = _pustokContext.Books.Include(x => x.Genre).Include(x => x.NewBookImages).Include(x=>x.BookTags).FirstOrDefault(x => x.Id == id);
             return View(book);
         }
     }

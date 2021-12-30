@@ -3,36 +3,117 @@
     ViewData["Title"] = "Create";
 }
 
-<div class="container">
+<div class="container" style="background-color:cadetblue">
     <div class="row">
-        <h1>Create New Book</h1>
+        <h1 style="color:white; font-weight:900;">Create New Book</h1>
         <div class="col-lg-8 mx-auto">
-            <form method="post" asp-action="create">
+            <form method="post" asp-action="create" enctype="multipart/form-data">
                 <div class="form-group">
-                    <label asp-for="Name">Name</label>
+                    <label style="color:white; font-weight:900;" asp-for="Name">Name</label>
                     <input type="text" class="form-control" asp-for="Name" placeholder="Enter Book name">
-
-                    <label asp-for="Desc">Desc</label>
-                    <input type="text" class="form-control" asp-for="Desc" placeholder="Enter Book desc">
-
-                    <label asp-for="Code">code</label>
-                    <input type="text" class="form-control" asp-for="Code" placeholder="Enter Book code">
-
-                    <label asp-for="CostPrice">costprice</label>
-                    <input type="text" class="form-control" asp-for="CostPrice" placeholder="Enter Book CostPrice">
-
-                    <label asp-for="SalePrice">saleprice</label>
-                    <input type="text" class="form-control" asp-for="SalePrice" placeholder="Enter Book SalePrice">
-
-                    <label asp-for="DiscountPercent">DiscountPercent</label>
-                    <input type="text" class="form-control" asp-for="DiscountPercent" placeholder="Enter Book DiscountPercent">
-
-                    <label asp-for="GenreId">GenreId</label>
-                    <input type="text" class="form-control" asp-for="GenreId" placeholder="Enter Book GenreId">
-
-                    <label asp-for="AuthorId">AuthorId</label>
-                    <input type="text" class="form-control" asp-for="AuthorId" placeholder="Enter Book AuthorId">
+                    <span class="text-danger" asp-validation-for="Name"></span>
                 </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label style="color:white; font-weight:900;" asp-for="AuthorId">Author</label>
+                        <select class="form-control" asp-for="AuthorId" asp-items="@new SelectList((List<Author>)ViewBag.Authors,nameof(Author.Id),nameof(Author.FullName))"></select>
+                        <span class="text-danger" asp-validation-for="AuthorId"></span>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label style="color:white; font-weight:900;" asp-for="GenreId">Genre</label>
+                        <select class="form-control" asp-for="GenreId" asp-items="@new SelectList((List<Genre>)ViewBag.Genres,nameof(Genre.Id),nameof(Genre.Name))"></select>
+                        <span class="text-danger" asp-validation-for="GenreId"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label style="color:white; font-weight:900;" asp-for="Desc">Desc</label>
+                    <input type="text" class="form-control" asp-for="Desc" placeholder="Enter Book desc">
+                    <span class="text-danger" asp-validation-for="Desc"></span>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label style="color:white; font-weight:900;" asp-for="GenreId">GenreId</label>
+                        <input type="text" class="form-control" asp-for="GenreId" placeholder="Enter Book GenreId">
+                        <span class="text-danger" asp-validation-for="GenreId"></span>
+                    </div>
+                    <div class="form-group">
+                        <label style="color:white; font-weight:900;" asp-for="AuthorId">AuthorId</label>
+                        <input type="text" class="form-control" asp-for="AuthorId" placeholder="Enter Book AuthorId">
+                        <span class="text-danger" asp-validation-for="AuthorId"></span>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label style="color:white; font-weight:900;" asp-for="Code">code</label>
+                        <input type="text" class="form-control" asp-for="Code" placeholder="Enter Book code">
+                        <span class="text-danger" asp-validation-for="Code"></span>
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <label style="color:white; font-weight:900;" asp-for="CostPrice">CostPrice</label>
+                        <input type="text" class="form-control" asp-for="CostPrice" placeholder="Enter Book CostPrice">
+                        <span class="text-danger" asp-validation-for="CostPrice"></span>
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <label style="color:white; font-weight:900;" asp-for="SalePrice">SalePrice</label>
+                        <input type="text" class="form-control" asp-for="SalePrice" placeholder="Enter Book SalePrice">
+                        <span class="text-danger" asp-validation-for="SalePrice"></span>
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <label style="color:white; font-weight:900;" asp-for="DiscountPercent">DiscountPercent</label>
+                        <input type="text" class="form-control" asp-for="DiscountPercent" placeholder="Enter Book DiscountPercent">
+                        <span class="text-danger" asp-validation-for="DiscountPercent"></span>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-check col-md-4 text-center">
+                        <input class="form-check-input" asp-for="StockStatus">
+                        <label style="color:white; font-weight:900;" class="form-check-label" asp-for="StockStatus">
+                            Stock status
+                        </label>
+                        <span class="text-danger" asp-validation-for="StockStatus"></span>
+                    </div>
+                    <div class="form-check col-md-4 text-center">
+                        <input class="form-check-input" asp-for="IsNew">
+                        <label style="color:white; font-weight:900;" class="form-check-label" asp-for="IsNew">
+                            IsNew
+                        </label>
+                        <span class="text-danger" asp-validation-for="IsNew"></span>
+                    </div>
+                    <div class="form-check col-md-4 text-center">
+                        <input class="form-check-input" asp-for="IsFeatured">
+                        <label style="color:white; font-weight:900;" class="form-check-label" asp-for="IsFeatured">
+                            IsFeatured
+                        </label>
+                        <span class="text-danger" asp-validation-for="IsFeatured"></span>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label style="color:white; font-weight:900;" asp-for="PosterFile">PosterFile</label>
+                        <input class="form-control" asp-for="PosterFile">
+                        <span class="text-danger" asp-validation-for="PosterFile"></span>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label style="color:white; font-weight:900;" asp-for="HoverPosterFile">HoverPosterFile</label>
+                        <input class="form-control" asp-for="HoverPosterFile">
+                        <span class="text-danger" asp-validation-for="HoverPosterFile"></span>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label style="color:white; font-weight:900;" asp-for="ImageFiles">ImageFiles</label>
+                        <input class="form-control" asp-for="ImageFiles">
+                        <span class="text-danger" asp-validation-for="ImageFiles"></span>
+                    </div>
+                </div>
+               
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
         </div>

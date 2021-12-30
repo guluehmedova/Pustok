@@ -16,7 +16,8 @@
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">Name</th>
-                        <th scope="col">Book Count</th>
+                        <th scope="col">Image</th>
+                        <th scope="col">SalePrice</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
@@ -24,15 +25,18 @@
                     @foreach (Book item in Model)
                     {
                         count++;
-                        <tr>
-                            <th scope="row">@count</th>
-                            <td colspan="2">@item.Name</td>
-                            <td></td>
-                            <td>
-                                <a asp-action="edit" asp-route-id="@item.Id" class="btn btn-danger">Edit</a>
-                                <a  class="btn btn-danger delete-btn">Delete</a>
-                            </td>
-                        </tr>
+                    <tr>
+                        <th scope="row">@count</th>
+                        <td>@item.Name</td>
+                        <td>
+                        <img width="100" src="~/uploads/books/@(item.NewBookImages.FirstOrDefault(x=>x.PosterStatus==true)?.Image)" />
+                        </td>
+                        <td>@item.SalePrice</td>
+                        <td>
+                            <a asp-action="edit" asp-route-id="@item.Id" class="btn btn-warning">Edit</a>
+                            <a asp-action="delete" asp-route-id="@item.Id" class="btn btn-danger delete-btn">Delete</a>
+                        </td>
+                    </tr>
                     }
                 </tbody>
             </table>

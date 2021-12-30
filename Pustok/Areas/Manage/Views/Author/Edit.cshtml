@@ -8,12 +8,16 @@
         <div class="col-lg-12">
             <h1>Author Edit</h1>
         </div>
-        <div class="col-lg-8">
-            <form method="post" asp-action="edit">
-                <div class="mb-3">
+        <div class="col-lg-8 mx-auto">
+            <form method="post" asp-action="edit" enctype="multipart/form-data">
+                <div class="form-group">
                     <label asp-for="FullName" class="form-label">FullName</label>
                     <input type="text" class="form-control" asp-for="FullName">
                     <span class="text-danger" asp-validation-for="FullName"></span>
+
+                    <label asp-for="ImageFile">ImageFile</label>
+                    <input class="form-control" asp-for="ImageFile">
+                    <span class="text-danger" asp-validation-for="ImageFile"></span>
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
