@@ -33,8 +33,15 @@ using Pustok.ViewModels;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 4 "C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\Areas\Manage\Views\_ViewImports.cshtml"
+using Pustok.Areas.Manage.ViewModels;
+
+#line default
+#line hidden
+#nullable disable
     [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"f64c2f6eebde1b5d75c1c332bfd697667f998253", @"/Areas/Manage/Views/Genre/Delete.cshtml")]
-    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"70fb66056688853165d6d5259a1a7e601a16618a", @"/Areas/Manage/Views/_ViewImports.cshtml")]
+    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"46512b46e8c4d5ee6989992dcab09f583a7f23da", @"/Areas/Manage/Views/_ViewImports.cshtml")]
     public class Areas_Manage_Views_Genre_Delete : global::Microsoft.AspNetCore.Mvc.Razor.RazorPage<Genre>
     {
         private static readonly global::Microsoft.AspNetCore.Razor.TagHelpers.TagHelperAttribute __tagHelperAttribute_0 = new global::Microsoft.AspNetCore.Razor.TagHelpers.TagHelperAttribute("method", "post", global::Microsoft.AspNetCore.Razor.TagHelpers.HtmlAttributeValueStyle.DoubleQuotes);
@@ -83,7 +90,7 @@ using Pustok.ViewModels;
 #line hidden
 #nullable disable
             WriteLiteral("</h5>\r\n                    ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "f64c2f6eebde1b5d75c1c332bfd697667f9982535852", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "f64c2f6eebde1b5d75c1c332bfd697667f9982536070", async() => {
                 WriteLiteral("\r\n                        <input name=\"Id\"");
                 BeginWriteAttribute("value", " value=\"", 422, "\"", 439, 1);
 #nullable restore
@@ -114,7 +121,7 @@ WriteAttributeValue("", 430, Model.Id, 430, 9, false);
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n                    ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "f64c2f6eebde1b5d75c1c332bfd697667f9982538151", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "f64c2f6eebde1b5d75c1c332bfd697667f9982538369", async() => {
                 WriteLiteral("Go to back");
             }
             );

@@ -200,12 +200,12 @@ namespace Pustok.Areas.Manage.Controllers
                 {
                     System.IO.File.Delete(path);
                 }
-                path = Path.Combine(_env.WebRootPath, "uploads/teachers", book.ImageFiles);  //tapa bilmedim 
-                using (FileStream stream = new FileStream(path, FileMode.Create))
-                {
-                    book.ImageFile.CopyTo(stream);
-                }
-                excistbookx.Image = book.ImageFile.FileName;
+               // path = Path.Combine(_env.WebRootPath, "uploads/teachers", book.ImageFiles);  //tapa bilmedim 
+                //using (FileStream stream = new FileStream(path, FileMode.Create))
+                //{
+                //    book.ImageFile.CopyTo(stream);
+                //}
+                //excistbookx.Image = book.ImageFile.FileName;
             }
 
             _context.SaveChanges();

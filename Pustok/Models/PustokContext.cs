@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using static Pustok.ViewModels.BasketViewModel;
 
 namespace Pustok.Models
 {
-    public class PustokContext:DbContext
+    public class PustokContext:IdentityDbContext
     {
         public PustokContext(DbContextOptions<PustokContext> options):base(options)
         {
@@ -25,6 +26,7 @@ namespace Pustok.Models
         public DbSet<Setting> Settings { get; set; }
         public DbSet<SocialMedia> SocialMedias { get; set; }
         public DbSet<NewBookImage> NewBookImages { get; set; }
+        public DbSet<AppUser> appUsers { get; set; }
 
     }
 }

@@ -82,12 +82,7 @@
                 <button class="rounded-circle border-0" id="sidebarToggle"></button>
             </div>
 
-            <!-- Sidebar Message -->
-            <div class="sidebar-card d-none d-lg-flex">
-                <img class="sidebar-card-illustration mb-2" src="~/manage/img/undraw_rocket.svg" alt="...">
-                <p class="text-center mb-2"><strong>SB Admin Pro</strong> is packed with premium features, components, and more!</p>
-                <a class="btn btn-success btn-sm" href="https://startbootstrap.com/theme/sb-admin-pro">Upgrade to Pro!</a>
-            </div>
+          
 
         </ul>
         <!-- End of Sidebar -->
@@ -114,6 +109,14 @@
                                 <button class="btn btn-primary" type="button">
                                     <i class="fas fa-search fa-sm"></i>
                                 </button>
+                            </div>
+                            <div 
+                                 style="width: 80px; height: 44px; background-color: #4e73df; margin:0px 10px">
+                                <a 
+                                   style="color:white;padding:10px"
+                                   asp-action="register"
+                                   asp-controller="account"
+                                   >Register</a>
                             </div>
                         </div>
                     </form>
@@ -296,7 +299,7 @@
                                     Activity Log
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <a class="dropdown-item" asp-action="logout" asp-controller="account">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </a>
