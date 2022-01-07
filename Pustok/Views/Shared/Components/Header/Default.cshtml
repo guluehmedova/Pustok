@@ -48,7 +48,7 @@
                                         <h3 class="menu-title"><a href="javascript:void(0)">Shop Grid </a></h3>
                                         <ul class="mega-single-block">
                                             <li><a href="shop-grid.html">Fullwidth</a></li>
-                                            <li><a href="shop-grid-left-sidebar.html">left Sidebar</a></li>
+                                            <li><a asp-action="detail" asp-controller="book" >left Sidebar</a></li>
                                             <li><a href="shop-grid-right-sidebar.html">Right Sidebar</a></li>
                                         </ul>
                                     </li>
@@ -204,8 +204,16 @@
                     <div class="main-navigation flex-lg-right">
                         <div class="cart-widget">
                             <div class="login-block">
-                                <a href="login-register.html" class="font-weight-bold">Login</a> <br>
-                                <span>or</span><a href="login-register.html">Register</a>
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <a href="login-register.html" class="font-weight-bold">@User.Identity.Name</a> <br>
+                                   <a asp-action="logout" asp-controller="account">LogOut</a>
+                                }
+                                else
+                                {
+                                    <a asp-action="login" asp-controller="account" class="font-weight-bold">Login</a> <br>
+                                    <span>or</span><a asp-action="register" asp-controller="account">Register</a>
+                                }
                             </div>
                             <div class="cart-block">
                                 <div class="cart-total">

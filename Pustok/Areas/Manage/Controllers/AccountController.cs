@@ -14,10 +14,12 @@ namespace Pustok.Areas.Manage.Controllers
     {
         private UserManager<AppUser> _userManager;
         private SignInManager<AppUser> _signInManager;
-        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+        private RoleManager<IdentityRole> _roleManager;
+        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
         }
         public IActionResult Login()
         {
@@ -25,7 +27,7 @@ namespace Pustok.Areas.Manage.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(AdminLoginViewModel adminLoginViewModel )
+        public async Task<IActionResult> Login(AdminLoginViewModel adminLoginViewModel)
         {
             if (!ModelState.IsValid) return View();
 
@@ -38,7 +40,6 @@ namespace Pustok.Areas.Manage.Controllers
 
             return RedirectToAction("index", "dashboard");
         }
-
         public async Task<IActionResult> LogOut()
         {
             await _signInManager.SignOutAsync();
@@ -48,6 +49,17 @@ namespace Pustok.Areas.Manage.Controllers
         {
             return View();
         }
+        public async Task<IActionResult> CreateRole()
+        {
+            IdentityRole role1 = new IdentityRole("SuperAdmin");
+            IdentityRole role2 = new IdentityRole("Admin");
+            IdentityRole role3 = new IdentityRole("Member");
 
+            await _roleManager.CreateAsync(role1);
+            await _roleManager.CreateAsync(role2);
+            await _roleManager.CreateAsync(role3);
+
+            return Ok();
+        }
     }
 }

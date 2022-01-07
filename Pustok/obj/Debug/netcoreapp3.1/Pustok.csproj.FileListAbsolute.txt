@@ -193,4 +193,10 @@ C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\bin\Debug\netcoreapp
 C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Identity.Stores.dll
 C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\obj\Debug\netcoreapp3.1\Razor\Areas\Manage\Views\Account\Login.cshtml.g.cs
 C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\obj\Debug\netcoreapp3.1\Razor\Areas\Manage\Views\Account\Register.cshtml.g.cs
+C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\obj\Debug\netcoreapp3.1\Razor\Views\Account\Register.cshtml.g.cs
+C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_ValidationViewPartial.cshtml.g.cs
+C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\obj\Debug\netcoreapp3.1\Razor\Views\Account\LogIn.cshtml.g.cs
+C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\obj\Debug\netcoreapp3.1\Razor\Views\Book\Index.cshtml.g.cs
+C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\obj\Debug\netcoreapp3.1\Razor\Views\Account\AccountDetail.cshtml.g.cs
+C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\obj\Debug\netcoreapp3.1\Razor\Views\Book\Detail.cshtml.g.cs
 C:\Users\ASUS\Desktop\ASP\Pustok-Partial-View-master\Pustok\obj\Debug\netcoreapp3.1\Pustok.csproj.AssemblyReference.cache

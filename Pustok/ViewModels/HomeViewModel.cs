@@ -17,6 +17,6 @@ namespace Pustok.ViewModels
         public List<Image> Images { get; set; }
         public List<BookTag> BookTags { get; set; }
         public List<Genre> Genres { get; set; }
-        public List<BookImage> BookImages { get; set; }
+        public List<NewBookImage>  newBookImages { get; set; }
     }
 }

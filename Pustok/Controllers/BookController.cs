@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Pustok.Models;
@@ -14,9 +16,23 @@ namespace Pustok.Controllers
     public class BookController : Controller
     {
         private PustokContext _context;
-        public BookController(PustokContext pustokContext)
+        private readonly UserManager<AppUser> _userManager;
+        private readonly SignInManager<AppUser> _signInManager;
+
+        public BookController(PustokContext pustokContext, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
         {
             _context = pustokContext;
+            _userManager = userManager;
+            _signInManager = signInManager;
+        }
+        public IActionResult Index()
+        {
+            BookViewModel bookViewModel = new BookViewModel
+            {
+                Genres = _context.Genres.Include(x => x.Books).ToList(),
+                Books=_context.Books.Include(x=>x.Author).Include(x=>x.NewBookImages).Include(x=>x.Genre).ToList(),
+            };
+            return View(bookViewModel);
         }
         public IActionResult AddBasket(int bookId)
         {
@@ -63,6 +79,18 @@ namespace Pustok.Controllers
             }
             return Json(bookIds);
         }
+        public IActionResult GetBook(int id)
+        {
+            Book book = _context.Books.Include(x => x.Genre).Include(x => x.BookTags).ThenInclude(bt => bt.Tag).Include(x => x.NewBookImages).FirstOrDefault(x => x.Id == id);
+            return PartialView("_ModalBookDetail", book);
+        }
+        public IActionResult Detail(int id)
+        {
+            Book book = _context.Books.Include(x => x.Genre).Include(x => x.NewBookImages).Include(x => x.BookTags).FirstOrDefault(x => x.Id == id);
+            return View(book);
+        }
+
+        
         #region CheckOut sehifesi
         public IActionResult CheckOut()
         {
@@ -86,7 +114,6 @@ namespace Pustok.Controllers
             return View();
         }
         #endregion
-
         #region Kitablari sebete elave edende melumatlarin viewcarda ekave etmek hissesi
         private BasketViewModel _getBasketItems(List<CookieBasketItemViewModel> cookiebasketItems)
         {
@@ -114,5 +141,6 @@ namespace Pustok.Controllers
             return basket;
         }
         #endregion
+      
     }
 }

@@ -3,8 +3,8 @@
     $(document).on("click", ".single-eye-btn", function () {
         console.log("salam burdayam")
         let id = $(this).attr("data-id");
-
-        fetch(`/home/getbook/${id}`)
+        let name = $(this).attr("data-name");
+        fetch(`/${name}/getbook/${id}`)
             .then(response => response.text())
             .then(data => {
                 console.log(data)
