@@ -31,11 +31,13 @@ namespace Pustok.Models
         public Author Author { get; set; }
         public List<NewBookImage> NewBookImages  { get; set; }
         public List<BookTag> BookTags { get; set; }
+        public List<Tag> Tags { get; set; }
         [NotMapped]
         public IFormFile PosterFile { get; set; }
         [NotMapped]
         public IFormFile HoverPosterFile { get; set; }
         [NotMapped]
         public List<IFormFile> ImageFiles { get; set; }
+        public List<BookComment> bookComments { get; set; }
     }
 }

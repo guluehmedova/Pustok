@@ -25,7 +25,7 @@ namespace Pustok.Areas.Manage.Controllers
         {
             ViewBag.TotalPage = (int)Math.Ceiling(Convert.ToDouble(_context.Books.Count()) / 4);
             ViewBag.SelectedPage = page;
-            return View(_context.Books.Include(x=>x.Author).Include(x=>x.Genre).Include(x=>x.NewBookImages).Skip((page-1)*4).Take(8).ToList());
+            return View(_context.Books.Include(x=>x.Author).Include(x=>x.bookComments).Include(x=>x.Genre).Include(x=>x.NewBookImages).Skip((page-1)*4).Take(8).ToList());
         }
         public IActionResult Create()
         {
@@ -230,6 +230,40 @@ namespace Pustok.Areas.Manage.Controllers
             _context.SaveChanges();
 
             return Ok();
+        }
+        public IActionResult Comments(int bookid)
+        {
+            List<BookComment> comments = _context.BookComments.Include(x=>x.Book).Where(x => x.Book.Id == bookid).ToList();
+            return View(comments);
+        }
+        public IActionResult DeleteComment(int id)
+        {
+            BookComment comment = _context.BookComments.FirstOrDefault(x => x.Id == id);
+            if (comment == null) return NotFound();
+
+            _context.BookComments.Remove(comment);
+            _context.SaveChanges();
+            return Ok();
+        }
+        public IActionResult InfoComment(int id)
+        {
+            BookComment comment = _context.BookComments.Include(x=>x.Book).FirstOrDefault(x => x.Id == id);
+            if (comment == null) return NotFound();
+
+            return View(comment);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AcceptComment(int id)
+        {
+            BookComment comment = _context.BookComments.Include(x => x.Book).FirstOrDefault(x => x.Id == id);
+            if (comment == null) return NotFound();
+
+            comment.Status = true;
+
+            _context.SaveChanges();
+
+            return RedirectToAction("index");
         }
     }
 }

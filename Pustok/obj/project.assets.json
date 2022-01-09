@@ -8725,11 +8725,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\ASUS\\Desktop\\ASP\\Pustok-Partial-View-master\\Pustok\\Pustok.csproj",
+      "projectUniqueName": "C:\\Users\\ASUS\\Desktop\\ASP\\Pustok\\Pustok\\Pustok.csproj",
       "projectName": "Pustok",
-      "projectPath": "C:\\Users\\ASUS\\Desktop\\ASP\\Pustok-Partial-View-master\\Pustok\\Pustok.csproj",
+      "projectPath": "C:\\Users\\ASUS\\Desktop\\ASP\\Pustok\\Pustok\\Pustok.csproj",
       "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ASUS\\Desktop\\ASP\\Pustok-Partial-View-master\\Pustok\\obj\\",
+      "outputPath": "C:\\Users\\ASUS\\Desktop\\ASP\\Pustok\\Pustok\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

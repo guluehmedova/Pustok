@@ -293,6 +293,49 @@ namespace Pustok.Migrations
                     b.ToTable("Books");
                 });
 
+            modelBuilder.Entity("Pustok.Models.BookComment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AppUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("BookId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreateddAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("FullName")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<int>("Rate")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("nvarchar(500)")
+                        .HasMaxLength(500);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
+
+                    b.HasIndex("BookId");
+
+                    b.ToTable("BookComments");
+                });
+
             modelBuilder.Entity("Pustok.Models.BookTag", b =>
                 {
                     b.Property<int>("Id")
@@ -502,11 +545,16 @@ namespace Pustok.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("BookId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(25)")
                         .HasMaxLength(25);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BookId");
 
                     b.ToTable("Tags");
                 });
@@ -588,6 +636,19 @@ namespace Pustok.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Pustok.Models.BookComment", b =>
+                {
+                    b.HasOne("Pustok.Models.AppUser", "AppUser")
+                        .WithMany()
+                        .HasForeignKey("AppUserId");
+
+                    b.HasOne("Pustok.Models.Book", "Book")
+                        .WithMany("bookComments")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Pustok.Models.BookTag", b =>
                 {
                     b.HasOne("Pustok.Models.Book", "Book")
@@ -610,6 +671,13 @@ namespace Pustok.Migrations
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Pustok.Models.Tag", b =>
+                {
+                    b.HasOne("Pustok.Models.Book", null)
+                        .WithMany("Tags")
+                        .HasForeignKey("BookId");
                 });
 #pragma warning restore 612, 618
         }

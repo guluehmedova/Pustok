@@ -18,19 +18,21 @@ namespace Pustok.Controllers
         private PustokContext _context;
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
-
         public BookController(PustokContext pustokContext, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
         {
             _context = pustokContext;
             _userManager = userManager;
             _signInManager = signInManager;
         }
-        public IActionResult Index()
+        public IActionResult Index(int? genreId)
         {
+            var books = _context.Books.Include(x => x.Author).Include(x => x.NewBookImages).Include(x => x.Genre).ToList();
+          //  if (genreId != null)
+              //  books = books.Where(x => x.GenreId == genreId);
             BookViewModel bookViewModel = new BookViewModel
             {
                 Genres = _context.Genres.Include(x => x.Books).ToList(),
-                Books=_context.Books.Include(x=>x.Author).Include(x=>x.NewBookImages).Include(x=>x.Genre).ToList(),
+                Books=books.ToList(),
             };
             return View(bookViewModel);
         }
@@ -86,11 +88,56 @@ namespace Pustok.Controllers
         }
         public IActionResult Detail(int id)
         {
-            Book book = _context.Books.Include(x => x.Genre).Include(x => x.NewBookImages).Include(x => x.BookTags).FirstOrDefault(x => x.Id == id);
-            return View(book);
-        }
+            Book book = _context.Books
+                .Include(x => x.NewBookImages).Include(x => x.Genre)
+                .Include(x => x.BookTags).ThenInclude(x => x.Tag)
+                .Include(x => x.Author).Include(x=>x.bookComments)
+                .FirstOrDefault(x => x.Id == id);
 
-        
+            if (book == null) return NotFound();
+
+            BookDetailViewModel bookDetailViewModel = new BookDetailViewModel
+            {
+                Book = book,
+                RelatedBooks = _context.Books.Include(x=>x.NewBookImages).Include(x=>x.Author)
+                .Where(x => x.GenreId == book.GenreId)
+                .OrderByDescending(x => x.Id).Take(5).ToList()
+            };
+           
+             return View(bookDetailViewModel);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Comment(BookComment comment)
+        {
+            if (!ModelState.IsValid) return NotFound();
+
+            if (!User.Identity.IsAuthenticated)
+            {
+                if (string.IsNullOrWhiteSpace(comment.Email))
+                {
+                    return NotFound();
+                }
+                if (string.IsNullOrWhiteSpace(comment.FullName))
+                {
+                    return NotFound();
+                }
+            }
+            else
+            {
+                AppUser user = await _userManager.FindByNameAsync(User.Identity.Name);
+                comment.AppUserId = user.Id;
+                comment.FullName = user.Fullname;
+                comment.Email = user.Email;
+            }
+
+            comment.Status = false;
+            comment.CreateddAt = DateTime.UtcNow.AddHours(4);
+
+            _context.BookComments.Add(comment);
+            _context.SaveChanges();
+
+            return RedirectToAction("detail", new { id=comment.BookId});
+        }
         #region CheckOut sehifesi
         public IActionResult CheckOut()
         {
@@ -141,6 +188,5 @@ namespace Pustok.Controllers
             return basket;
         }
         #endregion
-      
     }
 }

@@ -67,19 +67,19 @@ namespace Pustok.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> LogIn(MemberRegisterViewModel memberRegisterViewModel)
+        public async Task<IActionResult> LogIn(MemberLoginViewModel memberLoginVM)
         {
             if (!ModelState.IsValid) return View();
 
-            AppUser user = await _userManager.FindByEmailAsync(memberRegisterViewModel.Email);
+            AppUser user = await _userManager.FindByEmailAsync(memberLoginVM.Username);
             if (user==null)
             { ModelState.AddModelError("Email", "Email Or Password Are Not True"); return View(); }
 
-            var result = await _signInManager.PasswordSignInAsync(user, memberRegisterViewModel.Password, false, false);
+            var result = await _signInManager.PasswordSignInAsync(user, memberLoginVM.Password, false, false);
 
             if(!result.Succeeded) { ModelState.AddModelError("", "Email Or Password Are Not True"); return View();}
 
-            return RedirectToAction("accountdetail", "account");
+            return RedirectToAction("index", "home");
         }
         public async Task<IActionResult> LogOut()
         {
@@ -87,10 +87,53 @@ namespace Pustok.Controllers
             return RedirectToAction("index", "home");
         }
         [Authorize(Roles = "Member")]
-        public async Task<IActionResult> Profile()
+        public async Task<IActionResult> Profil()
         {
             AppUser user = await _userManager.FindByNameAsync(User.Identity.Name);
-            return View(user);
+            MemberProfilViewModel memberProfilViewModel = new MemberProfilViewModel
+            {
+                UserName = user.UserName,
+                FullName=user.Fullname,
+                Email=user.Email
+            };
+            return View(memberProfilViewModel);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Profil(MemberProfilViewModel memberProfilVM)
+        {
+            if (!ModelState.IsValid) return View();
+
+            AppUser user = await _userManager.FindByNameAsync(User.Identity.Name);
+            if (user == null) return NotFound();
+
+            if (!string.IsNullOrWhiteSpace(memberProfilVM.NewPassword) && !string.IsNullOrWhiteSpace(memberProfilVM.ConfirmNewPassword))
+            {
+                var passwordresult = await _userManager.ChangePasswordAsync(user, memberProfilVM.CurrentPassword, memberProfilVM.NewPassword);
+
+                if (!passwordresult.Succeeded)
+                {
+                    foreach (var error in passwordresult.Errors)
+                    {
+                        ModelState.AddModelError("", error.Description);
+                    }
+                    return View();
+                }
+            }
+
+            if (user.Email != memberProfilVM.Email && _userManager.Users.Any(x=>x.NormalizedEmail==memberProfilVM.Email.ToUpper()))
+            {
+                ModelState.AddModelError("Email", "This Email Is Already Exsist!");
+                return View();
+            }
+
+            user.UserName = memberProfilVM.UserName;
+            user.Fullname = memberProfilVM.FullName;
+            user.Email = memberProfilVM.Email;
+
+            await _userManager.UpdateAsync(user);
+
+            return RedirectToAction("index", "home");
         }
     }
 }

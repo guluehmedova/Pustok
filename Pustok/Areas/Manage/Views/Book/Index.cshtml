@@ -17,7 +17,12 @@
                         <th scope="col">#</th>
                         <th scope="col">Name</th>
                         <th scope="col">Image</th>
+                        <th scope="col">Author</th>
+                        <th scope="col">Genre</th>
+                        <th scope="col">CostPrice</th>
                         <th scope="col">SalePrice</th>
+                        <th scope="col">Discount</th>
+                        <th scope="col">Poster</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
@@ -29,10 +34,18 @@
                         <th scope="row">@count</th>
                         <td>@item.Name</td>
                         <td>
-                        <img width="100" src="~/uploads/books/@(item.NewBookImages.FirstOrDefault(x=>x.PosterStatus==true)?.Image)" />
+                            <img width="100" src="~/uploads/books/@(item.NewBookImages.FirstOrDefault(x=>x.PosterStatus==true)?.Image)" />
                         </td>
+                        <td>@item.Author.FullName</td>
+                        <td>@item.Genre.Name</td>
+                        <td>@item.CostPrice</td>
                         <td>@item.SalePrice</td>
+                        <td>@item.DiscountPercent</td>
                         <td>
+                            <img width="100" src="~/uploads/books/@item.NewBookImages.FirstOrDefault(x=>x.PosterStatus==true)?.Image" />
+                        </td>
+                        <td>
+                            <a asp-action="comments" asp-route-bookid="@item.Id" class="btn btn-primary">Comments (@item.bookComments.Count())</a>
                             <a asp-action="edit" asp-route-id="@item.Id" class="btn btn-warning">Edit</a>
                             <a asp-action="delete" asp-route-id="@item.Id" class="btn btn-danger delete-btn">Delete</a>
                         </td>

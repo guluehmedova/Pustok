@@ -1,0 +1,72 @@
+﻿@model MemberProfilViewModel
+
+<div class="container rounded mt-5 mb-5">
+    <div class="row">
+        <div class="col-md-5 mx-auto">
+            <div class="p-3 py-5">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="text-right">Profile Settings</h4>
+                </div>
+                <form method="post" asp-action="profil">
+                    <div class="row ">
+                        <div class="row mb-4">
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <label asp-for="UserName" class="labels">UserName</label>
+                                    <input asp-for="UserName" class="form-control">
+                                    <span asp-validation-for="UserName" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <label asp-for="FullName" class="labels">FullName</label>
+                                    <input asp-for="FullName" class="form-control">
+                                    <span asp-validation-for="FullName" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <label asp-for="Email" class="labels">Email</label>
+                                    <input asp-for="Email" class="form-control">
+                                    <span asp-validation-for="Email" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <label asp-for="NewPassword" class="labels">NewPassowrd</label>
+                                    <input asp-for="NewPassword" class="form-control">
+                                    <span asp-validation-for="NewPassword" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <label asp-for="ConfirmNewPassword" class="labels">ConfirmNewPassword</label>
+                                    <input asp-for="ConfirmNewPassword" class="form-control">
+                                    <span asp-validation-for="ConfirmNewPassword" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <label asp-for="CurrentPassword" class="labels">CurrentPassword</label>
+                                    <input asp-for="CurrentPassword" class="form-control">
+                                    <span asp-validation-for="CurrentPassword" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn--primary">Save Changes</button>
+                    </div>
+                    <div asp-validation-summary="ModelOnly"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    @await Html.PartialAsync("_ValidationViewPartial")
+}

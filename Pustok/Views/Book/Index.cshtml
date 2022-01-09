@@ -182,7 +182,7 @@
                                         <a href="#" class="author">
                                             @item.Author.FullName
                                         </a>
-                                        <h3><a asp-action="detail" asp-controller="book" asp-route-id="@item.Id">@item.Name</a></h3>
+                                        <h3><a asp-action="detail" asp-route-id="@item.Id">@item.Name</a></h3>
                                     </div>
                                     <div class="product-card--body">
                                         <div class="card-image">
@@ -232,7 +232,7 @@
                                                 @item.Author.FullName
                                             </a>
                                             <h3>
-                                                <a asp-action="detail" asp-controller="book" asp-route-id="@item.Id">
+                                                <a asp-action="detail"  asp-route-id="@item.Id">
                                                     @item.Name
                                                 </a>
                                             </h3>
@@ -322,29 +322,12 @@
                 <div class="inner-page-sidebar">
                     <!-- Accordion -->
                     <div class="single-block">
-                        <h3 class="sidebar-title">Categories</h3>
+                        <h3 class="sidebar-title">Genres</h3>
                         <ul class="sidebar-menu--shop">
-                            <li><a href="#">Accessories (5)</a></li>
-                            <li><a href="#">Arts & Photography (10)</a></li>
-                            <li><a href="#">Biographies (16)</a></li>
-                            <li><a href="#">Business & Money (0)</a></li>
-                            <li><a href="#">Calendars (6)</a></li>
-                            <li><a href="#">Children's Books (9)</a></li>
-                            <li><a href="#">Comics (16)</a></li>
-                            <li><a href="#">Cookbooks (7)</a></li>
-                            <li><a href="#">Education (3)</a></li>
-                            <li><a href="#">House Plants (6)</a></li>
-                            <li><a href="#">Indoor Living (9)</a></li>
-                            <li><a href="#">Perfomance Filters (5)</a></li>
-                            <li>
-                                <a href="#">Shop (16)</a>
-                                <ul class="inner-cat-items">
-                                    <li><a href="#">Saws (0)</a></li>
-                                    <li><a href="#">Concrete Tools (7)</a></li>
-                                    <li><a href="#">Drills (2)</a></li>
-                                    <li><a href="#">Sanders (1)</a></li>
-                                </ul>
-                            </li>
+                            @foreach (var item in Model.Genres)
+                            {
+                                <li><a asp-action="index" asp-route-genreId="@item.Id">@item.Name (@item.Books.Count())</a></li>
+                            }
                         </ul>
                     </div>
                     <!-- Price -->
