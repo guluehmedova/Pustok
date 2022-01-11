@@ -28,5 +28,6 @@ namespace Pustok.Models
         public DbSet<NewBookImage> NewBookImages { get; set; }
         public DbSet<AppUser> appUsers { get; set; }
         public DbSet<BookComment> BookComments { get; set; }
+        public DbSet<BasketItem> BasketItems { get; set; }
     }
 }

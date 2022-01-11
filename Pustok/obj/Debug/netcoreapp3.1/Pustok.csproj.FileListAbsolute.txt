@@ -403,3 +403,5 @@ C:\Users\ASUS\Desktop\ASP\Pustok\Pustok\obj\Debug\netcoreapp3.1\Pustok.genruntim
 C:\Users\ASUS\Desktop\ASP\Pustok\Pustok\obj\Debug\netcoreapp3.1\Razor\Areas\Manage\Views\Book\Comments.cshtml.g.cs
 C:\Users\ASUS\Desktop\ASP\Pustok\Pustok\obj\Debug\netcoreapp3.1\Razor\Areas\Manage\Views\Book\InfoComment.cshtml.g.cs
 C:\Users\ASUS\Desktop\ASP\Pustok\Pustok\obj\Debug\netcoreapp3.1\Razor\Views\Account\Profil.cshtml.g.cs
+C:\Users\ASUS\Desktop\ASP\Pustok\Pustok\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_CommentFormPartial.cshtml.g.cs
+C:\Users\ASUS\Desktop\ASP\Pustok\Pustok\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_MemberUpdateFormPartial.cshtml.g.cs

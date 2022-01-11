@@ -109,17 +109,45 @@ namespace Pustok.Controllers
         [HttpPost]
         public async Task<IActionResult> Comment(BookComment comment)
         {
-            if (!ModelState.IsValid) return NotFound();
+            Book book = _context.Books
+              .Include(x => x.NewBookImages).Include(x => x.Genre)
+              .Include(x => x.BookTags).ThenInclude(x => x.Tag)
+              .Include(x => x.Author).Include(x => x.bookComments)
+              .FirstOrDefault(x => x.Id == comment.BookId);
+
+            if (book == null) return NotFound();
+
+            BookDetailViewModel bookDetailViewModel = new BookDetailViewModel
+            {
+                Book = book,
+                Comment=comment,
+                RelatedBooks = _context.Books.Include(x => x.NewBookImages).Include(x => x.Author)
+                .Where(x => x.GenreId == book.GenreId)
+                .OrderByDescending(x => x.Id).Take(5).ToList()
+            };
+
+            if (!ModelState.IsValid)
+            {
+                TempData["error"] = "comment is not true";
+                return View("Detail", bookDetailViewModel);
+            }
+            if (!_context.Books.Any(x=>x.Id==comment.BookId))
+            {
+                TempData["error"] = "book not found";
+                return View("Detail", bookDetailViewModel);
+            }
 
             if (!User.Identity.IsAuthenticated)
             {
                 if (string.IsNullOrWhiteSpace(comment.Email))
                 {
-                    return NotFound();
+                    TempData["error"] = "email is required";
+                    return View("Detail", bookDetailViewModel);
                 }
                 if (string.IsNullOrWhiteSpace(comment.FullName))
                 {
-                    return NotFound();
+                    TempData["error"] = "fullname is required";
+                    return View("Detail", bookDetailViewModel);
                 }
             }
             else
@@ -132,9 +160,10 @@ namespace Pustok.Controllers
 
             comment.Status = false;
             comment.CreateddAt = DateTime.UtcNow.AddHours(4);
-
             _context.BookComments.Add(comment);
             _context.SaveChanges();
+
+            TempData["success"] = "successful";
 
             return RedirectToAction("detail", new { id=comment.BookId});
         }
@@ -158,7 +187,7 @@ namespace Pustok.Controllers
                     checkoutItems.Add(checkoutitem);
                 }
             }
-            return View();
+            return View(checkoutItems);
         }
         #endregion
         #region Kitablari sebete elave edende melumatlarin viewcarda ekave etmek hissesi

@@ -1,0 +1,50 @@
+﻿@model BookComment
+<div class="rating-row pt-2">
+    <p class="d-block">Your Rating</p>
+    <span class="rating-widget-block">
+        <input type="radio" name="rate" form="add-comment" value="1" id="star1">
+        <label for="star1"></label>
+        <input type="radio" name="rate" form="add-comment" value="2" id="star2">
+        <label for="star2"></label>
+        <input type="radio" name="rate" form="add-comment" value="3" id="star3">
+        <label for="star3"></label>
+        <input type="radio" name="rate" form="add-comment" value="4" id="star4">
+        <label for="star4"></label>
+        <input type="radio" name="rate" form="add-comment" value="5" id="star5">
+        <label for="star5"></label>
+    </span>
+    <span class="text-danger" asp-validation-for="Rate"></span>
+    <form asp-action="comment" id="add-comment" class="mt--15 site-form ">
+        <div class="row">
+            <div class="col-12">
+                <div class="form-group">
+                    <label for="message">Comment</label>
+                    <textarea name="text" id="message" cols="30" rows="10"
+                              class="form-control"></textarea>
+                </div>
+            </div>
+            @if (!User.Identity.IsAuthenticated)
+            {
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label asp-for="FullName">FUllName *</label>
+                        <input asp-for="FullName" class="form-control">
+                        <span asp-validation-for="FullName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label asp-for="Email">Email *</label>
+                        <input asp-for="Email" class="form-control">
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                </div>
+            }
+            <div class="col-lg-4">
+                <div class="submit-btn">
+                    <button type="submit" class="btn btn-black">Post Comment</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

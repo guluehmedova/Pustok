@@ -17,22 +17,31 @@
     <link rel="stylesheet" type="text/css" media="screen" href="~/css/plugins.css" />
     <link rel="stylesheet" type="text/css" media="screen" href="~/css/main.css" />
     <link rel="shortcut icon" type="~/image/x-icon" href="~/image/favicon.ico">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
     <div class="site-wrapper" id="top">
 
         @await Component.InvokeAsync("Header");
-       
+
         @RenderBody();
     </div>
-        <!--=================================
+    <!--=================================
     Brands Slider
     ===================================== -->
-        <section class="section-margin">
-            <h2 class="sr-only">Brand Slider</h2>
-            <div class="container">
-                <div class="brand-slider sb-slick-slider border-top border-bottom" data-slick-setting='{
+    @if (TempData["error"] != null)
+    {
+        <input type="hidden" id="toastr-error" value="@TempData["error"]" />
+    }
+    @if (TempData["success"] != null)
+    {
+        <input type="hidden" id="toastr-success" value="@TempData["success"]" />
+    }
+    <section class="section-margin">
+        <h2 class="sr-only">Brand Slider</h2>
+        <div class="container">
+            <div class="brand-slider sb-slick-slider border-top border-bottom" data-slick-setting='{
                                             "autoplay": true,
                                             "autoplaySpeed": 8000,
                                             "slidesToShow": 6
@@ -43,132 +52,161 @@
                 {"breakpoint":480, "settings": {"slidesToShow": 2} },
                 {"breakpoint":320, "settings": {"slidesToShow": 1} }
             ]'>
-                    <div class="single-slide">
-                        <img src="~/image/others/brand-1.jpg" alt="">
-                    </div>
-                    <div class="single-slide">
-                        <img src="~/image/others/brand-2.jpg" alt="">
-                    </div>
-                    <div class="single-slide">
-                        <img src="~/image/others/brand-3.jpg" alt="">
-                    </div>
-                    <div class="single-slide">
-                        <img src="~/image/others/brand-4.jpg" alt="">
-                    </div>
-                    <div class="single-slide">
-                        <img src="~/image/others/brand-5.jpg" alt="">
-                    </div>
-                    <div class="single-slide">
-                        <img src="~/image/others/brand-6.jpg" alt="">
-                    </div>
-                    <div class="single-slide">
-                        <img src="~/image/others/brand-1.jpg" alt="">
-                    </div>
-                    <div class="single-slide">
-                        <img src="~/image/others/brand-2.jpg" alt="">
-                    </div>
+                <div class="single-slide">
+                    <img src="~/image/others/brand-1.jpg" alt="">
+                </div>
+                <div class="single-slide">
+                    <img src="~/image/others/brand-2.jpg" alt="">
+                </div>
+                <div class="single-slide">
+                    <img src="~/image/others/brand-3.jpg" alt="">
+                </div>
+                <div class="single-slide">
+                    <img src="~/image/others/brand-4.jpg" alt="">
+                </div>
+                <div class="single-slide">
+                    <img src="~/image/others/brand-5.jpg" alt="">
+                </div>
+                <div class="single-slide">
+                    <img src="~/image/others/brand-6.jpg" alt="">
+                </div>
+                <div class="single-slide">
+                    <img src="~/image/others/brand-1.jpg" alt="">
+                </div>
+                <div class="single-slide">
+                    <img src="~/image/others/brand-2.jpg" alt="">
                 </div>
             </div>
-        </section>
-        <!--=================================
+        </div>
+    </section>
+    <!--=================================
     Footer Area
     ===================================== -->
-        <footer class="site-footer">
-            <div class="container">
-                <div class="row justify-content-between  section-padding">
-                    <div class=" col-xl-3 col-lg-4 col-sm-6">
-                        <div class="single-footer pb--40">
-                            <div class="brand-footer footer-title">
-                                <img src="~/image/@settings.FirstOrDefault(x=>x.Key=="Footer-logo")?.Value" alt="">
-                            </div>
-                            <div class="footer-contact">
-                                <p>
-                                    <span class="label">Address:</span><span class="text">
-                                        @settings.FirstOrDefault(x=>x.Key == "Adress")?.Value
-                                    </span>
-                                </p>
-                                <p><span class="label">Phone:</span><span class="text">+@settings.FirstOrDefault(x=>x.Key=="ContactPhone")?.Value</span></p>
-                                <p><span class="label">Email:</span><span class="text">@settings.FirstOrDefault(x=>x.Key == "Email")?.Value</span></p>
-                            </div>
+    <footer class="site-footer">
+        <div class="container">
+            <div class="row justify-content-between  section-padding">
+                <div class=" col-xl-3 col-lg-4 col-sm-6">
+                    <div class="single-footer pb--40">
+                        <div class="brand-footer footer-title">
+                            <img src="~/image/@settings.FirstOrDefault(x=>x.Key=="Footer-logo")?.Value" alt="">
+                        </div>
+                        <div class="footer-contact">
+                            <p>
+                                <span class="label">Address:</span><span class="text">
+                                    @settings.FirstOrDefault(x => x.Key == "Adress")?.Value
+                                </span>
+                            </p>
+                            <p><span class="label">Phone:</span><span class="text">+@settings.FirstOrDefault(x => x.Key == "ContactPhone")?.Value</span></p>
+                            <p><span class="label">Email:</span><span class="text">@settings.FirstOrDefault(x => x.Key == "Email")?.Value</span></p>
                         </div>
                     </div>
-                    <div class=" col-xl-3 col-lg-2 col-sm-6">
-                        <div class="single-footer pb--40">
-                            <div class="footer-title">
-                                <h3>Information</h3>
-                            </div>
-                            <ul class="footer-list normal-list">
-                                <li><a href="#">Prices drop</a></li>
-                                <li><a href="#">New products</a></li>
-                                <li><a href="#">Best sales</a></li>
-                                <li><a href="#">Contact us</a></li>
-                                <li><a href="#">Sitemap</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class=" col-xl-3 col-lg-2 col-sm-6">
-                        <div class="single-footer pb--40">
-                            <div class="footer-title">
-                                <h3>Extras</h3>
-                            </div>
-                            <ul class="footer-list normal-list">
-                                <li><a href="#">Delivery</a></li>
-                                <li><a href="#">About Us</a></li>
-                                <li><a href="#">Stores</a></li>
-                                <li><a href="#">Contact us</a></li>
-                                <li><a href="#">Sitemap</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class=" col-xl-3 col-lg-4 col-sm-6">
+                </div>
+                <div class=" col-xl-3 col-lg-2 col-sm-6">
+                    <div class="single-footer pb--40">
                         <div class="footer-title">
-                            <h3>Newsletter Subscribe</h3>
+                            <h3>Information</h3>
                         </div>
-                        <div class="newsletter-form mb--30">
-                            <form action="https://demo.hasthemes.com/pustok-preview/pustok/php/mail.php">
-                                <input type="email" class="form-control" placeholder="Enter Your Email Address Here...">
-                                <button class="btn btn--primary w-100">Subscribe</button>
-                            </form>
+                        <ul class="footer-list normal-list">
+                            <li><a href="#">Prices drop</a></li>
+                            <li><a href="#">New products</a></li>
+                            <li><a href="#">Best sales</a></li>
+                            <li><a href="#">Contact us</a></li>
+                            <li><a href="#">Sitemap</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class=" col-xl-3 col-lg-2 col-sm-6">
+                    <div class="single-footer pb--40">
+                        <div class="footer-title">
+                            <h3>Extras</h3>
                         </div>
-                        <div class="social-block">
-                            <h3 class="title">STAY CONNECTED</h3>
-                            <ul class="social-list list-inline">
-                                @foreach (var item in socialMedias)
-                                {
-                                    <li class="single-social @item.Name">
-                                        <a href="@item.RedirectUrl">@Html.Raw(item.Icon)</a>
-                                    </li>
-                                }
-                            </ul>
-                        </div>
+                        <ul class="footer-list normal-list">
+                            <li><a href="#">Delivery</a></li>
+                            <li><a href="#">About Us</a></li>
+                            <li><a href="#">Stores</a></li>
+                            <li><a href="#">Contact us</a></li>
+                            <li><a href="#">Sitemap</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class=" col-xl-3 col-lg-4 col-sm-6">
+                    <div class="footer-title">
+                        <h3>Newsletter Subscribe</h3>
+                    </div>
+                    <div class="newsletter-form mb--30">
+                        <form action="https://demo.hasthemes.com/pustok-preview/pustok/php/mail.php">
+                            <input type="email" class="form-control" placeholder="Enter Your Email Address Here...">
+                            <button class="btn btn--primary w-100">Subscribe</button>
+                        </form>
+                    </div>
+                    <div class="social-block">
+                        <h3 class="title">STAY CONNECTED</h3>
+                        <ul class="social-list list-inline">
+                            @foreach (var item in socialMedias)
+                            {
+                                <li class="single-social @item.Name">
+                                    <a href="@item.RedirectUrl">@Html.Raw(item.Icon)</a>
+                                </li>
+                            }
+                        </ul>
                     </div>
                 </div>
             </div>
-            <div class="footer-bottom">
-                <div class="container">
-                    <p class="copyright-heading">
-                        Suspendisse in auctor augue. Cras fermentum est ac fermentum tempor. Etiam
-                        vel
-                        magna volutpat, posuere eros
-                    </p>
-                    <a href="#" class="payment-block">
-                        <img src="~/image/icon/payment.png" alt="">
-                    </a>
-                    <p class="copyright-text">
-                        Copyright © 2019 <a href="#" class="author">Pustok</a>. All Right Reserved.
-                        <br>
-                        Design By Pustok
-                    </p>
-                </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p class="copyright-heading">
+                    Suspendisse in auctor augue. Cras fermentum est ac fermentum tempor. Etiam
+                    vel
+                    magna volutpat, posuere eros
+                </p>
+                <a href="#" class="payment-block">
+                    <img src="~/image/icon/payment.png" alt="">
+                </a>
+                <p class="copyright-text">
+                    Copyright © 2019 <a href="#" class="author">Pustok</a>. All Right Reserved.
+                    <br>
+                    Design By Pustok
+                </p>
             </div>
-        </footer>
+        </div>
+    </footer>
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <!-- Use Minified Plugins Version For Fast Page Load -->
-        <script src="~/js/plugins.js"></script>
-        <script src="~/js/ajax-mail.js"></script>
-        <script src="~/js/custom.js"></script>
-        <script src="~/js/main.js"></script>
-    @RenderSection("Scripts",required:false)
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- Use Minified Plugins Version For Fast Page Load -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="~/js/plugins.js"></script>
+    <script src="~/js/ajax-mail.js"></script>
+    <script src="~/js/custom.js"></script>
+    <script src="~/js/main.js"></script>
+    @RenderSection("Scripts", required: false)
+    <script>
+        toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": false,
+            "positionClass": "toast-top-center",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
+
+        $(document).ready(function (e) {
+            if ($("#toastr-error").length) {
+                toastr["error"]($("#toastr-error").val())
+            }
+            if ($("#toastr-success").length) {
+                toastr["success"]($("#toastr-success").val())
+            }
+        })
+    </script>
 </body>
 </html>

@@ -39,5 +39,6 @@ namespace Pustok.Models
         [NotMapped]
         public List<IFormFile> ImageFiles { get; set; }
         public List<BookComment> bookComments { get; set; }
+        public List<BasketItem> asketItems { get; set; }
     }
 }

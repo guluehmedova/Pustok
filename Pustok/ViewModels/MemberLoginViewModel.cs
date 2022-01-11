@@ -15,5 +15,6 @@ namespace Pustok.ViewModels
         [DataType(DataType.Password)]
         [StringLength(maximumLength:25,MinimumLength =8)]
         public string Password { get; set; }
+        public bool IsPersistent { get; set; }
     }
 }

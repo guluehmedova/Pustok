@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Pustok.Models;
 using Pustok.ViewModels;
 using System;
@@ -71,11 +72,11 @@ namespace Pustok.Controllers
         {
             if (!ModelState.IsValid) return View();
 
-            AppUser user = await _userManager.FindByEmailAsync(memberLoginVM.Username);
+            AppUser user = await _userManager.Users.FirstOrDefaultAsync(x => x.NormalizedUserName == memberLoginVM.Username.ToUpper() && !x.IsAdmin);
             if (user==null)
             { ModelState.AddModelError("Email", "Email Or Password Are Not True"); return View(); }
 
-            var result = await _signInManager.PasswordSignInAsync(user, memberLoginVM.Password, false, false);
+            var result = await _signInManager.PasswordSignInAsync(user, memberLoginVM.Password,  memberLoginVM.IsPersistent, false);
 
             if(!result.Succeeded) { ModelState.AddModelError("", "Email Or Password Are Not True"); return View();}
 
@@ -86,54 +87,92 @@ namespace Pustok.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction("index", "home");
         }
-        [Authorize(Roles = "Member")]
         public async Task<IActionResult> Profil()
         {
             AppUser user = await _userManager.FindByNameAsync(User.Identity.Name);
-            MemberProfilViewModel memberProfilViewModel = new MemberProfilViewModel
+            ProfileViewModel profileViewModel = new ProfileViewModel
             {
-                UserName = user.UserName,
-                FullName=user.Fullname,
-                Email=user.Email
+                Member = new MemberProfilViewModel
+                {
+                    UserName = user.UserName,
+                    FullName = user.Fullname,
+                    Email = user.Email
+                }
             };
-            return View(memberProfilViewModel);
+            return View(profileViewModel);
         }
         [HttpPost]
+        [Authorize(Roles = "Member")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Profil(MemberProfilViewModel memberProfilVM)
         {
-            if (!ModelState.IsValid) return View();
-
-            AppUser user = await _userManager.FindByNameAsync(User.Identity.Name);
-            if (user == null) return NotFound();
-
-            if (!string.IsNullOrWhiteSpace(memberProfilVM.NewPassword) && !string.IsNullOrWhiteSpace(memberProfilVM.ConfirmNewPassword))
+            AppUser member = await _userManager.FindByNameAsync(User.Identity.Name);
+            ProfileViewModel profilVM = new ProfileViewModel
             {
-                var passwordresult = await _userManager.ChangePasswordAsync(user, memberProfilVM.CurrentPassword, memberProfilVM.NewPassword);
+                Member = memberProfilVM
+            };
+            if(!ModelState.IsValid)
+            {
+                return View(profilVM);
+            }
 
-                if (!passwordresult.Succeeded)
+            if (member.Email != memberProfilVM.Email && _userManager.Users.Any(x => x.NormalizedEmail == memberProfilVM.Email.ToUpper()))
+            {
+                ModelState.AddModelError("Email", "This Email has laready been taken");
+                return View(profilVM);
+            }
+            if (member.UserName!=memberProfilVM.UserName && _userManager.Users.Any(x=>x.NormalizedEmail==memberProfilVM.UserName.ToUpper()))
+            {
+                ModelState.AddModelError("UserName", "This Email has laready been taken");
+                return View(profilVM);
+            }
+
+            member.Email = memberProfilVM.Email;
+            member.Fullname = memberProfilVM.FullName;
+            member.UserName = memberProfilVM.UserName;
+
+            var result = await _userManager.UpdateAsync(member);
+
+            if (!result.Succeeded)
+            {
+                foreach (var item in result.Errors)
                 {
-                    foreach (var error in passwordresult.Errors)
+                    ModelState.AddModelError("", item.Description);
+                }
+                return View(profilVM);
+            }
+
+            if (!string.IsNullOrEmpty(memberProfilVM.CurrentPassword) && !string.IsNullOrEmpty(memberProfilVM.ConfirmNewPassword))
+            {
+                if (memberProfilVM.CurrentPassword != memberProfilVM.ConfirmNewPassword)
+                {
+                    return View(profilVM);
+                }
+
+                if (!await _userManager.CheckPasswordAsync(member, memberProfilVM.CurrentPassword))
+                {
+                    ModelState.AddModelError("CurrentPassword", "CurrentPassword is not correct");
+                    return View(profilVM);
+                }
+
+                var passwordResult = await _userManager.ChangePasswordAsync(member, memberProfilVM.CurrentPassword, memberProfilVM.NewPassword);
+
+                if (!passwordResult.Succeeded)
+                {
+                    foreach (var item in result.Errors)
                     {
-                        ModelState.AddModelError("", error.Description);
+                        ModelState.AddModelError("", item.Description);
                     }
-                    return View();
+                    return View(profilVM);
                 }
             }
 
-            if (user.Email != memberProfilVM.Email && _userManager.Users.Any(x=>x.NormalizedEmail==memberProfilVM.Email.ToUpper()))
-            {
-                ModelState.AddModelError("Email", "This Email Is Already Exsist!");
-                return View();
-            }
+            _pustokContext.SaveChanges();
 
-            user.UserName = memberProfilVM.UserName;
-            user.Fullname = memberProfilVM.FullName;
-            user.Email = memberProfilVM.Email;
+            await _signInManager.SignInAsync(member, true);
 
-            await _userManager.UpdateAsync(user);
-
-            return RedirectToAction("index", "home");
+            return View(profilVM);
+           
         }
     }
 }

@@ -11,5 +11,8 @@ namespace Pustok.Models
     {
         [StringLength(maximumLength:50)]
         public string Fullname { get; set; }
+        public bool IsAdmin { get; set; }
+        public List<BookComment> Comments { get; set; }
+        public List<BasketItem> BasketItems { get; set; }
     }
 }
