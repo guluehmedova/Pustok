@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace Pustok.ViewModels
 {
-    public class CheckOutViewModel:BaseEntity
+    public class CheckOutViewModel
     {
-        public Book Book { get; set; }
-        public int Count { get; set; }
-        public decimal TotalAmount { get; set; }
+        public List<CheckoutItemViewModel> CheckoutItems { get; set; }
+        public Order Order { get; set; }
     }
 }

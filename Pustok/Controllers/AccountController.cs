@@ -87,6 +87,7 @@ namespace Pustok.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction("index", "home");
         }
+        [Authorize(Roles = "Member")]
         public async Task<IActionResult> Profil()
         {
             AppUser user = await _userManager.FindByNameAsync(User.Identity.Name);
@@ -97,7 +98,8 @@ namespace Pustok.Controllers
                     UserName = user.UserName,
                     FullName = user.Fullname,
                     Email = user.Email
-                }
+                },
+                Orders = _pustokContext.Orders.Include(x => x.OrderItems).ThenInclude(x => x.Book).Where(x => x.AppUserId == user.Id).ToList()
             };
             return View(profileViewModel);
         }

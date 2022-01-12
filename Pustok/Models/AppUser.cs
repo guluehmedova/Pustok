@@ -14,5 +14,6 @@ namespace Pustok.Models
         public bool IsAdmin { get; set; }
         public List<BookComment> Comments { get; set; }
         public List<BasketItem> BasketItems { get; set; }
+        public List<Order> Orders { get; set; }
     }
 }

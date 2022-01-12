@@ -462,6 +462,117 @@ namespace Pustok.Migrations
                     b.ToTable("NewBookImages");
                 });
 
+            modelBuilder.Entity("Pustok.Models.Order", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Address1")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(250)")
+                        .HasMaxLength(250);
+
+                    b.Property<string>("Address2")
+                        .HasColumnType("nvarchar(250)")
+                        .HasMaxLength(250);
+
+                    b.Property<string>("AppUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(25)")
+                        .HasMaxLength(25);
+
+                    b.Property<int>("CodeNumber")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CodePrefix")
+                        .HasColumnType("nvarchar(5)")
+                        .HasMaxLength(5);
+
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(25)")
+                        .HasMaxLength(25);
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DeliveryStatus")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("FullName")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(350)")
+                        .HasMaxLength(350);
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(25)")
+                        .HasMaxLength(25);
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Zipcode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(20)")
+                        .HasMaxLength(20);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("Pustok.Models.OrderItems", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BookId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("CostPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Count")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("DiscountPercent")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("SalePrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("OrderItems");
+                });
+
             modelBuilder.Entity("Pustok.Models.PromotionOne", b =>
                 {
                     b.Property<int>("Id")
@@ -652,11 +763,11 @@ namespace Pustok.Migrations
             modelBuilder.Entity("Pustok.Models.BasketItem", b =>
                 {
                     b.HasOne("Pustok.Models.AppUser", "AppUser")
-                        .WithMany()
+                        .WithMany("BasketItems")
                         .HasForeignKey("AppUserId");
 
                     b.HasOne("Pustok.Models.Book", "Book")
-                        .WithMany("asketItems")
+                        .WithMany("BasketItems")
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -710,6 +821,28 @@ namespace Pustok.Migrations
                     b.HasOne("Pustok.Models.Book", "Book")
                         .WithMany("NewBookImages")
                         .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Pustok.Models.Order", b =>
+                {
+                    b.HasOne("Pustok.Models.AppUser", "AppUser")
+                        .WithMany("Orders")
+                        .HasForeignKey("AppUserId");
+                });
+
+            modelBuilder.Entity("Pustok.Models.OrderItems", b =>
+                {
+                    b.HasOne("Pustok.Models.Book", "Book")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Pustok.Models.Order", "Order")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

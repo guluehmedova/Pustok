@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Pustok.Models;
@@ -14,19 +15,36 @@ namespace Pustok.ViewComponents
     public class HeaderViewComponent: ViewComponent
     {
         private PustokContext _context;
-        public HeaderViewComponent(PustokContext context)
+        private readonly UserManager<AppUser> _userManager;
+        private readonly SignInManager<AppUser> _signInManager;
+        public HeaderViewComponent(PustokContext context, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
         {
             _context = context;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
         public async Task<IViewComponentResult> InvokeAsync()
         {
             BasketViewModel basket = null;
-            var basketItemStr = HttpContext.Request.Cookies["basketItemList"];
-            if (basketItemStr !=null)
+            AppUser user = null;
+            if (User.Identity.IsAuthenticated)
             {
-                List<CookieBasketItemViewModel> cookieItems = JsonConvert.DeserializeObject<List<CookieBasketItemViewModel>>(basketItemStr);
-                basket = _getBasketItems(cookieItems);
+                user = await _userManager.FindByNameAsync(User.Identity.Name);
             }
+            if (user!=null && user.IsAdmin==false)
+            {
+                basket = _getBasketItems(_context.BasketItems.Include(x=>x.Book).ThenInclude(x=>x.NewBookImages).Where(x => x.AppUserId == user.Id).ToList());
+            }
+            else
+            {
+                var basketItemStr = HttpContext.Request.Cookies["basketItemList"];
+                if (basketItemStr != null)
+                {
+                    List<CookieBasketItemViewModel> cookieItems = JsonConvert.DeserializeObject<List<CookieBasketItemViewModel>>(basketItemStr);
+                    basket = _getBasketItems(cookieItems);
+                }
+            }
+           
             HeaderViewModel headerViewModel = new HeaderViewModel
             {
                 Genres = await _context.Genres.ToListAsync(),
@@ -35,7 +53,6 @@ namespace Pustok.ViewComponents
             };
             return View(headerViewModel);
         }
-
         private BasketViewModel _getBasketItems(List<CookieBasketItemViewModel> cookiebasketItems)
         {
             BasketViewModel basket = new BasketViewModel
@@ -59,6 +76,30 @@ namespace Pustok.ViewComponents
                 basket.BasketItems.Add(basketItem);
             }
 
+            return basket;
+        }
+        private BasketViewModel _getBasketItems(List<BasketItem> basketItems)
+        {
+            BasketViewModel basket = new BasketViewModel
+            {
+                BasketItems = new List<BasketItemViewModel>(),
+            };
+
+            foreach (var item in basketItems)
+            {
+                BasketItemViewModel basketItem = new BasketItemViewModel
+                {
+                    Name = item.Book.Name,
+                    Price = item.Book.DiscountPercent > 0 ? (item.Book.SalePrice * (1 - item.Book.DiscountPercent / 100)) : item.Book.SalePrice,
+                    BookId = item.Book.Id,
+                    Count = item.Count,
+                    PosterImage = item.Book.NewBookImages.FirstOrDefault(x => x.PosterStatus == true)?.Image
+                };
+
+                basketItem.TotalPrice = basketItem.Count * basketItem.Price;
+                basket.TotalAmount += basketItem.TotalPrice;
+                basket.BasketItems.Add(basketItem);
+            }
             return basket;
         }
     }

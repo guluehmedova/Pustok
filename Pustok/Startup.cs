@@ -48,7 +48,7 @@ namespace Pustok
                 opt.User.RequireUniqueEmail = false;
             }).AddDefaultTokenProviders().AddEntityFrameworkStores<PustokContext>();
 
-
+            services.AddScoped<IEmailService, EmailService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

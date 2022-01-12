@@ -42,6 +42,11 @@ namespace Pustok.Controllers
             Book book = _pustokContext.Books.Include(x => x.Genre).Include(x => x.NewBookImages).Include(x=>x.BookTags).FirstOrDefault(x => x.Id == id);
             return View(book);
         }
+
+        public IActionResult Email()
+        {
+            return View();
+        }
     }
 }
 

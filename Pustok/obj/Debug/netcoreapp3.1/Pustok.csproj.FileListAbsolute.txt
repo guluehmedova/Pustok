@@ -405,3 +405,10 @@ C:\Users\ASUS\Desktop\ASP\Pustok\Pustok\obj\Debug\netcoreapp3.1\Razor\Areas\Mana
 C:\Users\ASUS\Desktop\ASP\Pustok\Pustok\obj\Debug\netcoreapp3.1\Razor\Views\Account\Profil.cshtml.g.cs
 C:\Users\ASUS\Desktop\ASP\Pustok\Pustok\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_CommentFormPartial.cshtml.g.cs
 C:\Users\ASUS\Desktop\ASP\Pustok\Pustok\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_MemberUpdateFormPartial.cshtml.g.cs
+C:\Users\ASUS\Desktop\ASP\Pustok\Pustok\obj\Debug\netcoreapp3.1\Razor\Views\Home\Email.cshtml.g.cs
+C:\Users\ASUS\Desktop\ASP\Pustok\Pustok\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_CheckOutFormPartial.cshtml.g.cs
+C:\Users\ASUS\Desktop\ASP\Pustok\Pustok\obj\Debug\netcoreapp3.1\Razor\Views\Book\TrackOrder.cshtml.g.cs
+C:\Users\ASUS\Desktop\ASP\Pustok\Pustok\bin\Debug\netcoreapp3.1\MailKit.dll
+C:\Users\ASUS\Desktop\ASP\Pustok\Pustok\bin\Debug\netcoreapp3.1\MimeKit.dll
+C:\Users\ASUS\Desktop\ASP\Pustok\Pustok\bin\Debug\netcoreapp3.1\BouncyCastle.Crypto.dll
+C:\Users\ASUS\Desktop\ASP\Pustok\Pustok\obj\Debug\netcoreapp3.1\Pustok.csproj.AssemblyReference.cache

@@ -29,5 +29,7 @@ namespace Pustok.Models
         public DbSet<AppUser> appUsers { get; set; }
         public DbSet<BookComment> BookComments { get; set; }
         public DbSet<BasketItem> BasketItems { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
     }
 }
