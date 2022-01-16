@@ -1,7 +1,6 @@
-﻿@model List<Slider>
+﻿@model HomeViewModelArea
 @{
     ViewData["Title"] = "Index";
-    var count = 0;
 }
 
 <div class="container">
@@ -22,11 +21,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (Slider item in Model)
+                    @foreach (Slider item in Model.Slider)
                     {
-                        count++;
                         <tr>
-                            <th>@count</th>
+                            <th>@Model.PagenatedSliders.PageIndex</th>
                             <td>@item.Title1</td>
                             <td>@item.Title2</td>
                             <td>
@@ -41,16 +39,31 @@
                 </tbody>
             </table>
         </div>
-        @*<nav aria-label="Page navigation example ">
-                <ul class="pagination mx-auto">
-                    <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                    @for (int i = 1; i < totalpage; i++)
-                    {
-                        <li class="page-item"><a class="page-link" asp-action="index" asp-route-page="@i">@i</a></li>
-                    }
-                    <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                </ul>
-            </nav>*@
+        <nav aria-label="Page navigation example ">
+            <ul class="pagination mx-auto">
+                @if (Model.PagenatedSliders.HasPrev)
+                {
+                    <li>
+                        <a asp-action="index" asp-controller="slider" asp-route-page="@(Model.PagenatedSliders.PageIndex-1)" class="single-btn prev-btn ">
+                            <i class="zmdi zmdi-chevron-left"></i>
+                        </a>
+                    </li>
+                }
+                @for (int i = 1; i <= Model.PagenatedSliders.TotalPages; i++)
+                {
+                    <li class="@(Model.PagenatedSliders.PageIndex==i?"active":"")"><a class="page-link" asp-controller="slider" asp-action="index" asp-route-page="@i">@i</a></li>
+                }
+                @if (Model.PagenatedSliders.HasNext)
+                {
+
+                    <li>
+                        <a asp-action="index" asp-controller="slider" asp-route-page="@Model.PagenatedSliders.TotalPages" class="single-btn next-btn">
+                            <i class="zmdi zmdi-chevron-right"></i>|
+                        </a>
+                    </li>
+                }
+            </ul>
+        </nav>
     </div>
 </div>
 

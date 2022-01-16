@@ -66,6 +66,8 @@ namespace Pustok.Areas.Manage.Controllers
         }
         public IActionResult Login()
         {
+            //AppUser user = _userManager.FindByNameAsync("SuperAdmin").Result;
+            //var result = _userManager.AddToRoleAsync(user, "SuperAdmin").Result;
             return View();
         }
         [HttpPost]

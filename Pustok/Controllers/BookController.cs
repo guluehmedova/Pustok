@@ -31,17 +31,18 @@ namespace Pustok.Controllers
         public IActionResult Index(int? genreId, double? min, double? max,int page=1)
         {
             var books = _context.Books.Include(x => x.Author).Include(x => x.NewBookImages).Include(x => x.Genre).AsQueryable();
+            
+            ViewBag.GenreId = genreId;
+
             if (genreId != null)
                 books = books.Where(x => x.GenreId == genreId);
 
             BookViewModel bookViewModel = new BookViewModel
             {
                 Genres = _context.Genres.Skip((page - 1) * 8).Take(8).Include(x => x.Books).ToList(),
-                Books=books.ToList(),
+                Books = books.ToList(),
+                PagenatedBookLists = PagenatedList<Book>.Create(books, page, 2)
             };
-
-            ViewBag.TotalPage = (int)Math.Ceiling(Convert.ToDouble(_context.Books.Count()) / 8);
-            ViewBag.SelectedPage = page;
 
             //ViewBag.Min = books.Max(x=>x.SalePrice);
             //ViewBag.Max = books.Min(x => x.SalePrice);

@@ -3,8 +3,6 @@
     ViewData["Title"] = "Index";
     var min = ViewBag.Min;
     var max = ViewBag.Max;
-    int count = (ViewBag.SelectedPage - 1) * 4;
-    int totalpage = ViewBag.TotalPage;
 }
 
 <section class="breadcrumb-section">
@@ -292,30 +290,36 @@
                     <div class="col-md-12">
                         <div class="pagination-block">
                             <ul class="pagination-btns flex-center">
-                                <li>
-                                    <a href="#" class="single-btn prev-btn ">
-                                        |<i class="zmdi zmdi-chevron-left"></i>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="single-btn prev-btn ">
-                                        <i class="zmdi zmdi-chevron-left"></i>
-                                    </a>
-                                </li>
-                                <li class="active"><a href="#" class="single-btn">1</a></li>
-                                <li><a href="#" class="single-btn">2</a></li>
-                                <li><a href="#" class="single-btn">3</a></li>
-                                <li><a href="#" class="single-btn">4</a></li>
-                                <li>
-                                    <a href="#" class="single-btn next-btn">
-                                        <i class="zmdi zmdi-chevron-right"></i>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="single-btn next-btn">
-                                        <i class="zmdi zmdi-chevron-right"></i>|
-                                    </a>
-                                </li>
+                                @if (Model.PagenatedBookLists.HasPrev)
+                                {
+                                    <li>
+                                        <a asp-action="index" asp-controller="book" asp-route-page="1" asp-route-genreId="@ViewBag.GenreId" class="single-btn prev-btn ">
+                                            |<i class="zmdi zmdi-chevron-left"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a asp-action="index" asp-controller="book" asp-route-page="@(Model.PagenatedBookLists.PageIndex-1)" asp-route-genreId="@ViewBag.GenreId" class="single-btn prev-btn ">
+                                            <i class="zmdi zmdi-chevron-left"></i>
+                                        </a>
+                                    </li>
+                                }
+                                @for (int i = 1; i <= Model.PagenatedBookLists.TotalPages; i++)
+                                {
+                                    <li class="@(Model.PagenatedBookLists.PageIndex==i?"active":"")"><a asp-action="index" asp-controller="book" asp-route-page="@i" asp-route-genreId="@ViewBag.GenreId" class="single-btn">@i</a></li>
+                                }
+                                @if (Model.PagenatedBookLists.HasNext)
+                                {
+                                    <li>
+                                        <a asp-action="index" asp-controller="book" asp-route-page="@(Model.PagenatedBookLists.PageIndex-1)" asp-route-genreId="@ViewBag.GenreId" class="single-btn next-btn">
+                                            <i class="zmdi zmdi-chevron-right"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a asp-action="index" asp-controller="book" asp-route-page="@Model.PagenatedBookLists.TotalPages" asp-route-genreId="@ViewBag.GenreId" class="single-btn next-btn">
+                                            <i class="zmdi zmdi-chevron-right"></i>|
+                                        </a>
+                                    </li>
+                                }
                             </ul>
                         </div>
                     </div>
@@ -383,16 +387,6 @@
             </div>
 
         </div>
-        <nav aria-label="Page navigation example ">
-            <ul class="pagination mx-auto">
-                <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                @for (int i = 1; i < totalpage; i++)
-                {
-                    <li class="page-item"><a class="page-link" asp-action="index" asp-route-page="@i">@i</a></li>
-                }
-                <li class="page-item"><a class="page-link" href="#">Next</a></li>
-            </ul>
-        </nav>
     </div>
 </main>
 

@@ -1,8 +1,7 @@
-﻿@model List<Author>
+﻿@model HomeViewModelArea
 @{
     ViewData["Title"] = "Index";
-    int count = (ViewBag.SelectedPage - 1) * 4;
-    int totalpage = ViewBag.TotalPage;
+    int count = 0;
 }
 
 <div class="container">
@@ -23,7 +22,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (Author item in Model)
+                    @foreach (Author item in Model.Authors)
                     {
                         count++;
                         <tr>
@@ -44,12 +43,27 @@
         </div>
         <nav aria-label="Page navigation example ">
             <ul class="pagination mx-auto">
-                <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                @for (int i = 1; i < totalpage; i++)
+                @if (Model.PagenatedAuthors.HasPrev)
                 {
-                    <li class="page-item"><a class="page-link" asp-action="index" asp-route-page="@i">@i</a></li>
+                    <li>
+                        <a asp-action="index" asp-controller="author" asp-route-page="@(Model.PagenatedAuthors.PageIndex-1)" class="single-btn prev-btn ">
+                            <i class="zmdi zmdi-chevron-left"></i>
+                        </a>
+                    </li>
                 }
-                <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                @for (int i = 1; i <= Model.PagenatedAuthors.TotalPages; i++)
+                {
+                    <li class="@(Model.PagenatedAuthors.PageIndex==i?"active":"")"><a class="page-link" asp-action="index" asp-route-page="@i">@i</a></li>
+                }
+                @if (Model.PagenatedAuthors.HasNext)
+                {
+
+                    <li>
+                        <a asp-action="index" asp-controller="book" asp-route-page="@Model.PagenatedAuthors.TotalPages" class="single-btn next-btn">
+                            <i class="zmdi zmdi-chevron-right"></i>|
+                        </a>
+                    </li>
+                }
             </ul>
         </nav>
     </div>

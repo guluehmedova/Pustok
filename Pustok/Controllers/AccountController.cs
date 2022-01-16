@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Pustok.Models;
+using Pustok.Services;
 using Pustok.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -16,11 +17,13 @@ namespace Pustok.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly PustokContext _pustokContext;
-        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager,PustokContext pustokContext)
+        private readonly IEmailService _emailService;
+        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager,PustokContext pustokContext, IEmailService emailService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _pustokContext = pustokContext;
+            _emailService = emailService;
         }
         public IActionResult Register()
         {
@@ -175,6 +178,59 @@ namespace Pustok.Controllers
 
             return View(profilVM);
            
+        }
+        public IActionResult Forgot()
+        {
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Forgot(ForgotPasswordViewModel forgotVM)
+        {
+            if(!ModelState.IsValid) { return View(); }
+
+            AppUser user =await _userManager.FindByEmailAsync(forgotVM.Email);
+            if(user==null) { ModelState.AddModelError("Email", "This Email is not exist"); return View(); }
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var url = Url.Action("resetpassword", "account", new { email = user.Email, token = token }, Request.Scheme);
+            _emailService.Send(user.Email,url,"Reset Link");
+            return Ok(new { url });
+        }
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel resetPasswordVM)
+        {
+            AppUser user = await _userManager.FindByEmailAsync(resetPasswordVM.Email);
+            if (user == null || !(await _userManager.VerifyUserTokenAsync(user, _userManager.Options.Tokens.PasswordResetTokenProvider, "ResetPassword", resetPasswordVM.Token)))
+                return RedirectToAction("login");
+
+            return View(resetPasswordVM);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangePassword(ResetPasswordViewModel resetPasswordVM)
+        {
+            if (string.IsNullOrWhiteSpace(resetPasswordVM.Password) || resetPasswordVM.Password.Length>25)
+            ModelState.AddModelError("Password", "Password is required and must be less than 26 character");
+
+            if (!ModelState.IsValid) return View("ResetPassword", resetPasswordVM);
+
+            AppUser user = await _userManager.FindByEmailAsync(resetPasswordVM.Email);
+            if (user == null) return RedirectToAction("login");
+
+            var result = await _userManager.ResetPasswordAsync(user, resetPasswordVM.Token, resetPasswordVM.Password);
+
+            if (!result.Succeeded)
+            {
+                foreach (var item in result.Errors)
+                {
+                    ModelState.AddModelError("", item.Description);
+                }
+                return View("ResetPassword", resetPasswordVM);
+            }
+
+            TempData["Success"] = "Sifreniz ugurla yenilendi!";
+
+            return RedirectToAction("login");
         }
     }
 }

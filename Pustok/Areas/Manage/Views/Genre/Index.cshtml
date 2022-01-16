@@ -1,8 +1,6 @@
-﻿@model List<Genre>
+﻿@model HomeViewModelArea
 @{
     ViewData["Title"] = "Index";
-    int count = (ViewBag.SelectedPage - 1) *8;
-    int totalpage = ViewBag.TotalPage;
 }
 <div class="container">
     <div class="row">
@@ -21,11 +19,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (Genre item in Model)
+                    @foreach (Genre item in Model.Genres)
                     {
-                        count++;
+                        
                         <tr>
-                            <th scope="row">@count</th>
+                            <th scope="row">@Model.PagenatedGenres.PageIndex</th>
                             <td  colspan="2">@item.Name</td>
                             <td>@item.Books.Count()</td>
                             <td>
@@ -39,12 +37,27 @@
         </div>
         <nav aria-label="Page navigation example ">
             <ul class="pagination mx-auto">
-                <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                @for (int i = 1; i < totalpage; i++)
+                @if (Model.PagenatedGenres.HasPrev)
                 {
-                    <li class="page-item"><a class="page-link" asp-action="index" asp-route-page="@i">@i</a></li>
+                    <li>
+                        <a asp-action="index" asp-controller="genre" asp-route-page="@(Model.PagenatedGenres.PageIndex-1)" class="single-btn prev-btn ">
+                            <i class="zmdi zmdi-chevron-left"></i>
+                        </a>
+                    </li>
                 }
-                <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                @for (int i = 1; i <= Model.PagenatedGenres.TotalPages; i++)
+                {
+                    <li class="@(Model.PagenatedGenres.PageIndex==i?"active":"")"><a class="page-link" asp-controller="genre" asp-action="index" asp-route-page="@i">@i</a></li>
+                }
+                @if (Model.PagenatedGenres.HasNext)
+                {
+
+                    <li>
+                        <a asp-action="index" asp-controller="genre" asp-route-page="@Model.PagenatedGenres.TotalPages" class="single-btn next-btn">
+                            <i class="zmdi zmdi-chevron-right"></i>|
+                        </a>
+                    </li>
+                }
             </ul>
         </nav>
     </div>

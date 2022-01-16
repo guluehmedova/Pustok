@@ -1,8 +1,13 @@
 ﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Pustok.Areas.Manage.ViewModels;
 using Pustok.Helper;
 using Pustok.Models;
+using Pustok.Services;
+using Pustok.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,16 +21,33 @@ namespace Pustok.Areas.Manage.Controllers
     {
         private PustokContext _context;
         private IWebHostEnvironment _env;
-        public BookController(PustokContext context, IWebHostEnvironment env)
+        private readonly UserManager<AppUser> _userManager;
+        private readonly SignInManager<AppUser> _signInManager;
+        private readonly IEmailService _emailService;
+        public BookController(PustokContext context, IWebHostEnvironment env, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IEmailService emailService)
         {
             _context = context;
-            _env = env; 
+            _env = env;
+            _userManager = userManager;
+            _signInManager = signInManager;
+            _emailService = emailService;
         }
-        public IActionResult Index(int page=1)
+        public IActionResult Index( int page = 1, string search=null,bool? status=null)
         {
-            ViewBag.TotalPage = (int)Math.Ceiling(Convert.ToDouble(_context.Books.Count()) / 4);
-            ViewBag.SelectedPage = page;
-            return View(_context.Books.Include(x=>x.Author).Include(x=>x.bookComments).Include(x=>x.Genre).Include(x=>x.NewBookImages).Skip((page-1)*4).Take(8).ToList());
+            var books = _context.Books.Include(x => x.Author).Include(x => x.bookComments).Include(x => x.Genre).Include(x => x.NewBookImages).Skip((page - 1) * 4).Take(8).AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(search))
+                books = books.Where(x => x.Name.ToUpper().Contains(search.ToUpper()));
+
+            if (status != null)
+                books = books.Where(x => x.IsDeleted == status);
+
+            HomeViewModelArea homeViewModelArea = new HomeViewModelArea
+            {
+                PagenatedBooks = PagenatedList<Book>.Create(books, page, 2),
+                Books = books.ToList(),
+            };
+            return View(homeViewModelArea);
         }
         public IActionResult Create()
         {
@@ -213,20 +235,12 @@ namespace Pustok.Areas.Manage.Controllers
         }
         public IActionResult Delete(int id)
         {
-            Slider slider = _context.Sliders.FirstOrDefault(x => x.Id == id);
+            Book book = _context.Books.FirstOrDefault(x => x.Id == id);
 
-            if (slider == null) { return NotFound(); }
+            if (book == null) { return NotFound(); }
 
-            if (!string.IsNullOrWhiteSpace(slider.Image))
-            {
-                string path = Path.Combine(_env.WebRootPath, "uploads/sliders", slider.Image);
-
-                if (System.IO.File.Exists(path))
-                {
-                    System.IO.File.Delete(path);
-                }
-            }
-            _context.Sliders.Remove(slider);
+            book.IsDeleted = true;
+            _context.Books.Remove(book);
             _context.SaveChanges();
 
             return Ok();
@@ -264,6 +278,142 @@ namespace Pustok.Areas.Manage.Controllers
             _context.SaveChanges();
 
             return RedirectToAction("index");
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AcceptItem(int id)
+        {
+            BookItem item = _context.BookItems.Include(x => x.Book).FirstOrDefault(x => x.Id == id);
+            if (item == null) return NotFound();
+
+            item.Status = true;
+
+            _context.SaveChanges();
+
+            return RedirectToAction("index");
+        }
+        public async Task<IActionResult> CheckOut()
+        {
+            CheckOutViewModel checkoutVM = new CheckOutViewModel
+            {
+                CheckoutItems = await _getCheckoutItems(),
+                Order = new Order()
+            };
+            return View(checkoutVM);
+        }
+        public async Task<IActionResult> Order(Order order)
+        {
+            AppUser user = null;
+            List<CheckoutItemViewModel> checkoutItems = await _getCheckoutItems();
+
+            if (User.Identity.IsAuthenticated)
+            {
+                user = _userManager.Users.FirstOrDefault(x => x.UserName == User.Identity.Name && x.IsAdmin == false);
+            }
+
+            if (checkoutItems.Count == 0)
+                ModelState.AddModelError("", "There is not a any selected product");
+            if (user == null && string.IsNullOrWhiteSpace(order.Email))
+                ModelState.AddModelError("Email", "Email is required");
+            if (user == null && string.IsNullOrWhiteSpace(order.FullName))
+                ModelState.AddModelError("FullName", "FullName is required");
+
+            if (!ModelState.IsValid)
+            {
+                return View("CheckOut", new CheckOutViewModel { CheckoutItems = checkoutItems, Order = order });
+            }
+
+            if (user != null)
+            {
+                order.Email = user.Email;
+                order.FullName = user.Fullname;
+                order.AppUserId = user.Id;
+            }
+
+            var lastOrder = _context.Orders.OrderByDescending(x => x.Id).FirstOrDefault();
+
+            order.CodePrefix = order.FullName[0].ToString().ToUpper() + order.Email[0].ToString().ToUpper();
+            order.CodeNumber = lastOrder == null ? 1001 : lastOrder.CodeNumber + 1;
+            order.CreatedAt = DateTime.UtcNow.AddHours(4);
+            order.Status = Enums.OrderStatus.Pending;
+            order.OrderItems = new List<OrderItem>();
+
+            foreach (var item in checkoutItems)
+            {
+                OrderItem orderItem = new OrderItem
+                {
+                    BookId = item.Book.Id,
+                    Count = item.Count,
+                    CostPrice = item.Book.CostPrice,
+                    SalePrice = item.Book.SalePrice,
+                    DiscountPercent = item.Book.DiscountPercent
+                };
+                order.TotalAmount += orderItem.DiscountPercent > 0
+                    ? (orderItem.SalePrice * (1 - orderItem.DiscountPercent / 100)) * orderItem.Count
+                    : orderItem.SalePrice * orderItem.Count;
+
+                order.OrderItems.Add(orderItem);
+            }
+
+            _context.Orders.Add(order);
+            _context.SaveChanges();
+            _emailService.Send(order.AppUser.Email, "Sifaris", order.CodeNumber + order.CodePrefix);
+
+            if (user != null)
+            {
+                _context.BasketItems.RemoveRange(_context.BasketItems.Where(x => x.AppUserId == user.Id));
+                _context.SaveChanges();
+            }
+            else
+            {
+                HttpContext.Response.Cookies.Delete("basketItemList");
+            }
+            return RedirectToAction("profile", "account");
+        }
+        private async Task<List<CheckoutItemViewModel>> _getCheckoutItems()
+        {
+            List<CheckoutItemViewModel> checkoutItems = new List<CheckoutItemViewModel>();
+
+            AppUser user = null;
+            if (User.Identity.IsAuthenticated)
+            {
+                user = await _userManager.FindByNameAsync(User.Identity.Name);
+            }
+
+            if (user != null && user.IsAdmin == false)
+            {
+                List<BasketItem> basketItems = _context.BasketItems.Include(x => x.Book).Where(x => x.AppUserId == user.Id).ToList();
+
+                foreach (var item in basketItems)
+                {
+                    CheckoutItemViewModel checkoutItem = new CheckoutItemViewModel
+                    {
+                        Book = item.Book,
+                        Count = item.Count
+                    };
+                    checkoutItems.Add(checkoutItem);
+                }
+            }
+            else
+            {
+                string basketItemsStr = HttpContext.Request.Cookies["basketItemList"];
+                if (basketItemsStr != null)
+                {
+                    List<CookieBasketItemViewModel> basketItems = JsonConvert.DeserializeObject<List<CookieBasketItemViewModel>>(basketItemsStr);
+
+                    foreach (var item in basketItems)
+                    {
+                        CheckoutItemViewModel checkoutItem = new CheckoutItemViewModel
+                        {
+                            Book = _context.Books.FirstOrDefault(x => x.Id == item.BookId),
+                            Count = item.Count
+                        };
+                        checkoutItems.Add(checkoutItem);
+                    }
+                }
+            }
+
+            return checkoutItems;
         }
     }
 }

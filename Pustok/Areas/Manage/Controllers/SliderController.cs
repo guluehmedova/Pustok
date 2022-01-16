@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Pustok.Areas.Manage.ViewModels;
 using Pustok.Models;
 using System;
 using System.Collections.Generic;
@@ -19,9 +20,15 @@ namespace Pustok.Areas.Manage.Controllers
             _context = context;
             _env = env;
         }
-        public IActionResult Index()
+        public IActionResult Index(int page = 1)
         {
-            return View(_context.Sliders.ToList());
+            var sliders = _context.Sliders.AsQueryable();
+            HomeViewModelArea homeareVM = new HomeViewModelArea
+            {
+                Slider = sliders.ToList(),
+               PagenatedSliders=PagenatedList<Slider>.Create(sliders,page,2)
+            };
+            return View(homeareVM);
         }
         public IActionResult Create()
         {

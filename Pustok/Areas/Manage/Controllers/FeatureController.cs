@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Pustok.Areas.Manage.ViewModels;
 using Pustok.Models;
 using System;
 using System.Collections.Generic;
@@ -17,9 +18,13 @@ namespace Pustok.Areas.Manage.Controllers
         }
         public IActionResult Index(int page=1)
         {
-            ViewBag.TotalPage = (int)Math.Ceiling(Convert.ToDouble(_context.Features.Count()) / 8);
-            ViewBag.SelectedPage = page;
-            return View(_context.Features.Skip((page - 1) * 8).Take(8).ToList());
+            var features = _context.Features.Skip((page - 1) * 8).Take(8).AsQueryable();
+            HomeViewModelArea homeViewModelArea = new HomeViewModelArea
+            {
+                Features = features.ToList(),
+                PagenatedFeatures = PagenatedList<Feature>.Create(features, page, 2)
+            };
+            return View(homeViewModelArea);
         }
         public IActionResult Create()
         {

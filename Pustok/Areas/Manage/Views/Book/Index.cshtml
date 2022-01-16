@@ -1,13 +1,26 @@
-﻿@model List<Book>
+﻿@model HomeViewModelArea
 @{
     ViewData["Title"] = "Index";
-    int count = (ViewBag.SelectedPage - 1) * 8;
-    int totalpage = ViewBag.TotalPage;
 }
 <div class="container">
     <div class="row">
         <div class="col-lg-12">
             <h1 style="display:inline-block">Books</h1>
+            <form asp-action="index" method="get">
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <input class="form-control" name="search" type="text" placeholder="Default input">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <select name="status" class="form-control" id="exampleFormControlSelect1">
+                            <option value="">Hamisi</option>
+                            <option value="true">Silinmisler</option>
+                            <option value="false">Aktivler</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Filter</button>
+                </div>
+            </form>
             <a asp-action="create" style="float:right" class="btn btn-primary">Create new</a>
         </div>
         <div class="col-lg-12">
@@ -27,41 +40,53 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (Book item in Model)
+                    @foreach (Book item in Model.Books)
                     {
-                        count++;
-                    <tr>
-                        <th scope="row">@count</th>
-                        <td>@item.Name</td>
-                        <td>
-                            <img width="100" src="~/uploads/books/@(item.NewBookImages.FirstOrDefault(x=>x.PosterStatus==true)?.Image)" />
-                        </td>
-                        <td>@item.Author.FullName</td>
-                        <td>@item.Genre.Name</td>
-                        <td>@item.CostPrice</td>
-                        <td>@item.SalePrice</td>
-                        <td>@item.DiscountPercent</td>
-                        <td>
-                            <img width="100" src="~/uploads/books/@item.NewBookImages.FirstOrDefault(x=>x.PosterStatus==true)?.Image" />
-                        </td>
-                        <td>
-                            <a asp-action="comments" asp-route-bookid="@item.Id" class="btn btn-primary">Comments (@item.bookComments.Count())</a>
-                            <a asp-action="edit" asp-route-id="@item.Id" class="btn btn-warning">Edit</a>
-                            <a asp-action="delete" asp-route-id="@item.Id" class="btn btn-danger delete-btn">Delete</a>
-                        </td>
-                    </tr>
+                        <tr>
+                            <th scope="row">@Model.PagenatedBooks.PageIndex</th>
+                            <td>@item.Name</td>
+                            <td>
+                                <img width="100" src="~/uploads/books/@(item.NewBookImages.FirstOrDefault(x=>x.PosterStatus==true)?.Image)" />
+                            </td>
+                            <td>@item.Author.FullName</td>
+                            <td>@item.Genre.Name</td>
+                            <td>@item.CostPrice</td>
+                            <td>@item.SalePrice</td>
+                            <td>@item.DiscountPercent</td>
+                            <td>
+                                <img width="100" src="~/uploads/books/@item.NewBookImages.FirstOrDefault(x=>x.PosterStatus==true)?.Image" />
+                            </td>
+                            <td>
+                                <a asp-action="comments" asp-route-bookid="@item.Id" class="btn btn-primary">Comments (@item.bookComments.Count())</a>
+                                <a asp-action="edit" asp-route-id="@item.Id" class="btn btn-warning">Edit</a>
+                                <a asp-action="delete" asp-route-id="@item.Id" class="btn btn-danger delete-btn">Delete</a>
+                            </td>
+                        </tr>
                     }
                 </tbody>
             </table>
         </div>
         <nav aria-label="Page navigation example ">
             <ul class="pagination mx-auto">
-                <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                @for (int i = 1; i < totalpage; i++)
+                @if (Model.PagenatedBooks.HasPrev)
                 {
-                    <li class="page-item"><a class="page-link" asp-action="index" asp-route-page="@i">@i</a></li>
+                    <li>
+                        <a asp-action="index" asp-controller="book" asp-route-page="@(Model.PagenatedBooks.PageIndex-1)" class="single-btn prev-btn ">
+                        </a>
+                    </li>
                 }
-                <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                @for (int i = 1; i <= Model.PagenatedBooks.TotalPages; i++)
+                {
+                    <li class="@(Model.PagenatedBooks.PageIndex==i?"active":"")"><a class="page-link" asp-controller="book" asp-action="index" asp-route-page="@i">@i</a></li>
+                }
+                @if (Model.PagenatedBooks.HasNext)
+                {
+
+                    <li>
+                        <a asp-action="index" asp-controller="book" asp-route-page="@Model.PagenatedBooks.TotalPages" class="single-btn next-btn">
+                        </a>
+                    </li>
+                }
             </ul>
         </nav>
     </div>

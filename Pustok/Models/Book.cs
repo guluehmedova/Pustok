@@ -27,6 +27,7 @@ namespace Pustok.Models
         public bool StockStatus { get; set; }
         public bool IsFeatured { get; set; }
         public bool IsNew { get; set; }
+        public bool IsDeleted { get; set; }
         public Genre Genre { get; set; }
         public Author Author { get; set; }
         public List<NewBookImage> NewBookImages  { get; set; }

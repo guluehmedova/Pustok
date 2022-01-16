@@ -411,4 +411,7 @@ C:\Users\ASUS\Desktop\ASP\Pustok\Pustok\obj\Debug\netcoreapp3.1\Razor\Views\Book
 C:\Users\ASUS\Desktop\ASP\Pustok\Pustok\bin\Debug\netcoreapp3.1\MailKit.dll
 C:\Users\ASUS\Desktop\ASP\Pustok\Pustok\bin\Debug\netcoreapp3.1\MimeKit.dll
 C:\Users\ASUS\Desktop\ASP\Pustok\Pustok\bin\Debug\netcoreapp3.1\BouncyCastle.Crypto.dll
+C:\Users\ASUS\Desktop\ASP\Pustok\Pustok\obj\Debug\netcoreapp3.1\Razor\Views\Account\Forgot.cshtml.g.cs
+C:\Users\ASUS\Desktop\ASP\Pustok\Pustok\obj\Debug\netcoreapp3.1\Razor\Views\Account\ResetPassword.cshtml.g.cs
 C:\Users\ASUS\Desktop\ASP\Pustok\Pustok\obj\Debug\netcoreapp3.1\Pustok.csproj.AssemblyReference.cache
+C:\Users\ASUS\Desktop\ASP\Pustok\Pustok\obj\Debug\netcoreapp3.1\Razor\Areas\Manage\Views\Book\Order.cshtml.g.cs

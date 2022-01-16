@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Pustok.Areas.Manage.ViewModels;
 using Pustok.Models;
 using System;
 using System.Collections.Generic;
@@ -18,9 +19,13 @@ namespace Pustok.Areas.Manage.Controllers
         }
         public IActionResult Index(int page = 1)
         {
-            ViewBag.TotalPage = (int)Math.Ceiling(Convert.ToDouble(_context.Tags.Count()) / 8);
-            ViewBag.SelectedPage = page;
-            return View(_context.Tags.Skip((page - 1) * 8).Take(8).ToList());
+            var tags = _context.Tags.Skip((page - 1) * 8).Take(8).AsQueryable();
+            HomeViewModelArea homeareaVM = new HomeViewModelArea
+            {
+                Tags = tags.ToList(),
+                PagenatedTags=PagenatedList<Tag>.Create(tags,page,2)
+            };
+            return View(homeareaVM);
         }
         public IActionResult Create()
         {

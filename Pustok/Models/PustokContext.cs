@@ -31,5 +31,6 @@ namespace Pustok.Models
         public DbSet<BasketItem> BasketItems { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<BookItem> BookItems { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Pustok.Areas.Manage.ViewModels;
 using Pustok.Models;
 using System;
 using System.Collections.Generic;
@@ -22,9 +23,14 @@ namespace Pustok.Areas.Manage.Controllers
         }
         public IActionResult Index(int page=1)
         {
-            ViewBag.TotalPage = (int)Math.Ceiling(Convert.ToDouble(_context.Authors.Count())/ 4);
-            ViewBag.SelectedPage = page;
-            return View(_context.Authors.Skip((page-1)*4).Take(8).Include(x => x.Books).ToList());
+            var authors = _context.Authors.Skip((page - 1) * 4).Take(8).Include(x => x.Books).AsQueryable();
+            HomeViewModelArea homeVM = new HomeViewModelArea
+            {
+                Authors = authors.ToList(),
+                PagenatedAuthors = PagenatedList<Author>.Create(authors, page, 2),
+            };
+           
+            return View(homeVM);
         }
         public IActionResult Create()
         {

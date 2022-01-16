@@ -1,0 +1,50 @@
+﻿@{
+    ViewData["Title"] = "Order";
+    int count = 0;
+    decimal total = 0;
+}
+@model BookItem
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1>Item Detail's List</h1>
+        </div>
+        <div class="col-lg-12">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Item Count</th>
+                        <th scope="col">Item Price</th>
+                        <th scope="col">Total Price</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @*@foreach (var item in Model.Book)
+                    {
+                        decimal salePrice = item.Book.DiscountPercent > 0 ? (item.Book.SalePrice * (1 - item.Book.DiscountPercent) / 100) : item.Book.SalePrice;
+                        count++;
+                        total += (salePrice * item.Count);
+                        <tr>
+                            <th scope="row">@count</th>
+                            <td>@item.Book.Name X @item.Count</td>
+                            <td>$@(salePrice*item.Count)</td>
+                            <td>$@total</td>
+                            <td>
+                                @if (!Model.Status)
+                                {
+                                    <form method="post" asp-action="AcceptComment" class="d-inline-block">
+                                        <input name="Id" value="@Model.Id" type="hidden" />
+                                        <button type="submit" class="btn btn-primary">Accept</button>
+                                    </form>
+                                }
+                            </td>
+                        </tr>
+                    }*@
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+

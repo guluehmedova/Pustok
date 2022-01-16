@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace Pustok.Areas.Manage.Controllers
 {
     [Area("manage")]
-    [Authorize(Roles ="SuperAdmin, Admin")]
+    //[Authorize(Roles ="SuperAdmin, Admin")]
     public class DashboardController : Controller
     {
         private readonly UserManager<AppUser> _userManager;
@@ -27,12 +27,10 @@ namespace Pustok.Areas.Manage.Controllers
         //{
         //    AppUser appUser = new AppUser
         //    {
-        //        UserName = "MainAdmin",
-        //        Fullname = "Gulu Ahmedova"
+        //        UserName = "SuperAdmin",
+        //        Fullname = "Super Admin"
         //    };
-
         //    var result = await _userManager.CreateAsync(appUser, "Admin123");
-
         //    return Ok(result);
         //}
     }

@@ -18,6 +18,9 @@
                         <input class="mb-0 form-control" type="password" asp-for="Password" placeholder="Enter your password">
                         <span asp-validation-for="Password" class="text-danger"></span>
                     </div>
+                    <div class="col-lg-12">
+                        <a asp-action="forgot" asp-controller="account">Forgot Password ?</a>
+                    </div>
                     <div class="col-md-12">
                         <button type="submit" class="btn btn-outlined">Login</button>
                     </div>
