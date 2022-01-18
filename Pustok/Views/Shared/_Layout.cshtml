@@ -208,5 +208,21 @@
             }
         })
     </script>
+
+    <script src="~/lib/microsoft/signalr/dist/browser/signalr.min.js"></script>
+    <script>
+
+        var connection = new signalR.HubConnectionBuilder().withUrl("/hub").build();
+        connection.start().then(function () {
+            console.log(connection.connectionId);
+        });
+
+        connection.on("CommentAccepted", function () {
+            if ($("#toaster-success").length) {
+                toastr["success"]("Your comment is accepted")
+            }
+        });
+    </script>
+
 </body>
-</html>
+</html >

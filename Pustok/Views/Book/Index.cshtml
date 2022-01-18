@@ -293,29 +293,29 @@
                                 @if (Model.PagenatedBookLists.HasPrev)
                                 {
                                     <li>
-                                        <a asp-action="index" asp-controller="book" asp-route-page="1" asp-route-genreId="@ViewBag.GenreId" class="single-btn prev-btn ">
+                                        <a asp-action="index" asp-controller="book" asp-route-page="1" asp-route-genreId="@ViewBag.GenreId" asp-route-minPrice="@ViewBag.SelectedMinPrice" asp-route-maxPrice="@ViewBag.SelectedMaxPrice" class="single-btn prev-btn ">
                                             |<i class="zmdi zmdi-chevron-left"></i>
                                         </a>
                                     </li>
                                     <li>
-                                        <a asp-action="index" asp-controller="book" asp-route-page="@(Model.PagenatedBookLists.PageIndex-1)" asp-route-genreId="@ViewBag.GenreId" class="single-btn prev-btn ">
+                                        <a asp-action="index" asp-controller="book" asp-route-page="@(Model.PagenatedBookLists.PageIndex-1)" asp-route-genreId="@ViewBag.GenreId" asp-route-minPrice="@ViewBag.SelectedMinPrice" asp-route-maxPrice="@ViewBag.SelectedMaxPrice" class="single-btn prev-btn ">
                                             <i class="zmdi zmdi-chevron-left"></i>
                                         </a>
                                     </li>
                                 }
                                 @for (int i = 1; i <= Model.PagenatedBookLists.TotalPages; i++)
                                 {
-                                    <li class="@(Model.PagenatedBookLists.PageIndex==i?"active":"")"><a asp-action="index" asp-controller="book" asp-route-page="@i" asp-route-genreId="@ViewBag.GenreId" class="single-btn">@i</a></li>
+                                    <li class="@(Model.PagenatedBookLists.PageIndex==i?"active":"")"><a asp-action="index" asp-controller="book" asp-route-page="@i" asp-route-genreId="@ViewBag.GenreId" asp-route-minPrice="@ViewBag.SelectedMinPrice" asp-route-maxPrice="@ViewBag.SelectedMaxPrice" class="single-btn">@i</a></li>
                                 }
                                 @if (Model.PagenatedBookLists.HasNext)
                                 {
                                     <li>
-                                        <a asp-action="index" asp-controller="book" asp-route-page="@(Model.PagenatedBookLists.PageIndex-1)" asp-route-genreId="@ViewBag.GenreId" class="single-btn next-btn">
+                                        <a asp-action="index" asp-controller="book" asp-route-page="@(Model.PagenatedBookLists.PageIndex-1)" asp-route-genreId="@ViewBag.GenreId" asp-route-minPrice="@ViewBag.SelectedMinPrice" asp-route-maxPrice="@ViewBag.SelectedMaxPrice" class="single-btn next-btn">
                                             <i class="zmdi zmdi-chevron-right"></i>
                                         </a>
                                     </li>
                                     <li>
-                                        <a asp-action="index" asp-controller="book" asp-route-page="@Model.PagenatedBookLists.TotalPages" asp-route-genreId="@ViewBag.GenreId" class="single-btn next-btn">
+                                        <a asp-action="index" asp-controller="book" asp-route-page="@Model.PagenatedBookLists.TotalPages" asp-route-genreId="@ViewBag.GenreId" asp-route-minPrice="@ViewBag.SelectedMinPrice" asp-route-maxPrice="@ViewBag.SelectedMaxPrice"class="single-btn next-btn">
                                             <i class="zmdi zmdi-chevron-right"></i>|
                                         </a>
                                     </li>
@@ -400,3 +400,36 @@
     </div>
 </div>
 
+@section Scripts
+{
+    <script>
+        /*-------------------------------------
+        --> Range Slider
+        ---------------------------------------*/
+        $(function () {
+            $(".sb-range-slider").slider({
+                range: true,
+                min: @ViewBag.MinPrice,
+                max: @ViewBag.MaxPrice,
+                values: [@ViewBag.SelectedMinPrice, @ViewBag.SelectedMaxPrice],
+                slide: function (event, ui) {
+                    $("#amount").val("£" + ui.values[0] + " - £" + ui.values[1]);
+                },
+                change: function (event, ui) {
+                    console.log(ui.values[0] + " - " + ui.values[1]);
+
+                    let url = new URL(window.location.href);
+                    let params = new URLSearchParams(url.search);
+
+                    params.set("minPrice", ui.values[0]);
+                    params.set("maxPrice", ui.values[1]);
+                    url.search = params;
+
+                    window.location = url.href;
+                }
+            });
+            $("#amount").val("£" + $(".sb-range-slider").slider("values", 0) +
+                " - £" + $(".sb-range-slider").slider("values", 1));
+        });
+    </script>
+}

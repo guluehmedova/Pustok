@@ -364,6 +364,31 @@ namespace Pustok.Migrations
                     b.ToTable("BookComments");
                 });
 
+            modelBuilder.Entity("Pustok.Models.BookItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AppUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("BookId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
+
+                    b.HasIndex("BookId");
+
+                    b.ToTable("BookItems");
+                });
+
             modelBuilder.Entity("Pustok.Models.BookTag", b =>
                 {
                     b.Property<int>("Id")
@@ -535,6 +560,9 @@ namespace Pustok.Migrations
                         .HasColumnType("nvarchar(20)")
                         .HasMaxLength(20);
 
+                    b.Property<bool?>("status")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AppUserId");
@@ -702,12 +730,19 @@ namespace Pustok.Migrations
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
+                    b.Property<string>("ConnectionId")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
                     b.Property<string>("Fullname")
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<bool>("IsAdmin")
                         .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastConnectDate")
+                        .HasColumnType("datetime2");
 
                     b.HasDiscriminator().HasValue("AppUser");
                 });
@@ -799,6 +834,19 @@ namespace Pustok.Migrations
 
                     b.HasOne("Pustok.Models.Book", "Book")
                         .WithMany("bookComments")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Pustok.Models.BookItem", b =>
+                {
+                    b.HasOne("Pustok.Models.AppUser", "User")
+                        .WithMany()
+                        .HasForeignKey("AppUserId");
+
+                    b.HasOne("Pustok.Models.Book", "Book")
+                        .WithMany()
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

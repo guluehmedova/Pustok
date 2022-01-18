@@ -28,7 +28,7 @@ namespace Pustok.Controllers
             _signInManager = signInManager;
             _emailService = emailService;
         }
-        public IActionResult Index(int? genreId, double? min, double? max,int page=1)
+        public IActionResult Index(int? genreId, int page=1, decimal? minPrice=null, decimal? maxPrice=null)
         {
             var books = _context.Books.Include(x => x.Author).Include(x => x.NewBookImages).Include(x => x.Genre).AsQueryable();
             
@@ -37,15 +37,22 @@ namespace Pustok.Controllers
             if (genreId != null)
                 books = books.Where(x => x.GenreId == genreId);
 
+            ViewBag.MinPrice = books.Min(x => x.SalePrice);
+            ViewBag.MaxPrice = books.Max(x => x.SalePrice);
+
+            if (minPrice != null && maxPrice != null)
+                books = books.Where(x => x.SalePrice >= minPrice && x.SalePrice <= maxPrice);
+
+         
+            ViewBag.SelectedMinPrice = minPrice ?? ViewBag.MinPrice;
+            ViewBag.SelectedMaxPrice = maxPrice ?? ViewBag.MaxPrice;
+
             BookViewModel bookViewModel = new BookViewModel
             {
                 Genres = _context.Genres.Skip((page - 1) * 8).Take(8).Include(x => x.Books).ToList(),
                 Books = books.ToList(),
                 PagenatedBookLists = PagenatedList<Book>.Create(books, page, 2)
             };
-
-            //ViewBag.Min = books.Max(x=>x.SalePrice);
-            //ViewBag.Max = books.Min(x => x.SalePrice);
             return View(bookViewModel);
         }
         public IActionResult AddBasket(int bookId)
@@ -196,7 +203,7 @@ namespace Pustok.Controllers
 
             _context.Orders.Add(order);
             _context.SaveChanges();
-            _emailService.Send(order.AppUser.Email, "Sifaris", order.CodeNumber+order.CodePrefix);
+            _emailService.Send(user.Email, "Sifaris", order.CodeNumber+order.CodePrefix);
 
             if (user != null)
             {

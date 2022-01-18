@@ -188,10 +188,8 @@ namespace Pustok.Controllers
         public async Task<IActionResult> Forgot(ForgotPasswordViewModel forgotVM)
         {
             if(!ModelState.IsValid) { return View(); }
-
             AppUser user =await _userManager.FindByEmailAsync(forgotVM.Email);
             if(user==null) { ModelState.AddModelError("Email", "This Email is not exist"); return View(); }
-
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
             var url = Url.Action("resetpassword", "account", new { email = user.Email, token = token }, Request.Scheme);
             _emailService.Send(user.Email,url,"Reset Link");
@@ -202,7 +200,6 @@ namespace Pustok.Controllers
             AppUser user = await _userManager.FindByEmailAsync(resetPasswordVM.Email);
             if (user == null || !(await _userManager.VerifyUserTokenAsync(user, _userManager.Options.Tokens.PasswordResetTokenProvider, "ResetPassword", resetPasswordVM.Token)))
                 return RedirectToAction("login");
-
             return View(resetPasswordVM);
         }
         [HttpPost]
@@ -211,14 +208,10 @@ namespace Pustok.Controllers
         {
             if (string.IsNullOrWhiteSpace(resetPasswordVM.Password) || resetPasswordVM.Password.Length>25)
             ModelState.AddModelError("Password", "Password is required and must be less than 26 character");
-
             if (!ModelState.IsValid) return View("ResetPassword", resetPasswordVM);
-
             AppUser user = await _userManager.FindByEmailAsync(resetPasswordVM.Email);
             if (user == null) return RedirectToAction("login");
-
             var result = await _userManager.ResetPasswordAsync(user, resetPasswordVM.Token, resetPasswordVM.Password);
-
             if (!result.Succeeded)
             {
                 foreach (var item in result.Errors)
@@ -227,10 +220,13 @@ namespace Pustok.Controllers
                 }
                 return View("ResetPassword", resetPasswordVM);
             }
-
             TempData["Success"] = "Sifreniz ugurla yenilendi!";
-
             return RedirectToAction("login");
+        }
+        public IActionResult Chat()
+        {
+            var users = _userManager.Users.Where(x => !x.IsAdmin).ToList();
+            return View(users);
         }
     }
 }

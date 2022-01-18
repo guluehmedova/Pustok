@@ -1,0 +1,68 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    int count = 0;
+}
+@model List<Order>
+
+<div class="container text-center" 
+     style="background: #c2e59c; /* fallback for old browsers */ background: -webkit-linear-gradient(to left, #64b3f4, #c2e59c); /* Chrome 10-25, Safari 5.1-6 */ background: linear-gradient(to left, #64b3f4, #c2e59c); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */ "
+    <div class="row">
+        <div style="color:white" class="col-lg-12">
+            <h1 >Order Items Lists</h1>
+        </div>
+        <div class="col-lg-12">
+            <table class="table" style="color:white;">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">FullName</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        count++;
+                        <tr>
+                            <th scope="row">@count</th>
+                            <td>@item.Email</td>
+                            <td>@item.FullName</td>
+                            <td>
+                                <a class="text-danger" asp-action="rejectorder" asp-controller="order"><i style="color:red" class="fas fa-ban"></i></a>
+                                <a class="text-danger" asp-action="acceptorder" asp-controller="order"><i style="color:green" class="far fa-check-circle"></i></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            @*<nav aria-label="Page navigation example ">
+                <ul class="pagination mx-auto">
+                    @if (Model.PagenatedOrders.HasPrev)
+                    {
+                        <li>
+                            <a asp-action="index" asp-controller="genre" asp-route-page="@(Model.PagenatedOrders.PageIndex-1)" class="single-btn prev-btn ">
+                                <i class="zmdi zmdi-chevron-left"></i>
+                            </a>
+                        </li>
+                    }
+                    @for (int i = 1; i <= Model.PagenatedOrders.TotalPages; i++)
+                    {
+                        <li class="@(Model.PagenatedOrders.PageIndex==i?"active":"")"><a class="page-link" asp-controller="genre" asp-action="index" asp-route-page="@i">@i</a></li>
+                    }
+                    @if (Model.PagenatedOrders.HasNext)
+                    {
+
+                        <li>
+                            <a asp-action="index" asp-controller="genre" asp-route-page="@Model.PagenatedOrders.TotalPages" class="single-btn next-btn">
+                                <i class="zmdi zmdi-chevron-right"></i>|
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </nav>*@
+
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,20 @@
+﻿
+@{
+    ViewData["Title"] = "RejectComment";
+}
+@model BookComment
+<h1>RejectComment</h1>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <form asp-action="rejectcomment" method="post">
+                <label asp-for="Text">Comment</label>
+                <input asp-for="Text" />
+                <span class="text-danger" asp-validation-for="Text"></span>
+                <button type="submit" class="btn btn--primary">Add</button>
+            </form>
+        </div>
+    </div>
+</div>
+

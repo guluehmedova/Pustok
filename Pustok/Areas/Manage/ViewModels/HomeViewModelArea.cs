@@ -15,6 +15,7 @@ namespace Pustok.Areas.Manage.ViewModels
         public List<Tag> Tags { get; set; }
         public List<Slider> Slider { get; set; }
         public List<Setting> Settings { get; set; }
+        public List<Order> Orders { get; set; }
         public PagenatedList<Author> PagenatedAuthors { get; set; }
         public PagenatedList<Book> PagenatedBooks { get; set; }
         public PagenatedList<Feature> PagenatedFeatures { get; set; }
@@ -22,5 +23,6 @@ namespace Pustok.Areas.Manage.ViewModels
         public PagenatedList<Setting> PagenatedSettings { get; set; }
         public PagenatedList<Slider> PagenatedSliders { get; set; }
         public PagenatedList<Tag> PagenatedTags { get; set; }
+        public PagenatedList<Order> PagenatedOrders { get; set; }
     }
 }

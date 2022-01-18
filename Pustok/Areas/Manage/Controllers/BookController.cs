@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Pustok.Areas.Manage.ViewModels;
@@ -24,13 +25,15 @@ namespace Pustok.Areas.Manage.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IEmailService _emailService;
-        public BookController(PustokContext context, IWebHostEnvironment env, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IEmailService emailService)
+        private readonly IHubContext<PustokHub> _hubContext;
+        public BookController(PustokContext context, IWebHostEnvironment env, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IEmailService emailService, IHubContext<PustokHub> hubContext)
         {
             _context = context;
             _env = env;
             _userManager = userManager;
             _signInManager = signInManager;
             _emailService = emailService;
+            _hubContext = hubContext;
         }
         public IActionResult Index( int page = 1, string search=null,bool? status=null)
         {
@@ -268,15 +271,18 @@ namespace Pustok.Areas.Manage.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AcceptComment(int id)
+        public async Task<IActionResult> AcceptComment(int id)
         {
-            BookComment comment = _context.BookComments.Include(x => x.Book).FirstOrDefault(x => x.Id == id);
+            BookComment comment =  _context.BookComments.Include(x => x.Book).FirstOrDefault(x => x.Id == id);
             if (comment == null) return NotFound();
-
             comment.Status = true;
-
             _context.SaveChanges();
 
+            //AppUser user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == comment.AppUserId);
+            //if (user.ConnectionId != null)
+            //{
+            //    await _hubContext.Clients.Client(user.ConnectionId).SendAsync("CommentAccepted");
+            //}
             return RedirectToAction("index");
         }
         [HttpPost]

@@ -49,6 +49,7 @@ namespace Pustok
             }).AddDefaultTokenProviders().AddEntityFrameworkStores<PustokContext>();
 
             services.AddScoped<IEmailService, EmailService>();
+            services.AddSignalR();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -74,15 +75,19 @@ namespace Pustok
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute
-             (
+                (
                  name: "Area",
                  pattern: "{area:exists}/{controller=dashboard}/{action=index}/{id?}"
-             );
+                );
 
                 endpoints.MapControllerRoute
-            (
+                 (
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}"
+                );
+
+                endpoints.MapHub<PustokHub>("/myhub");
+
             });
         }
     }

@@ -1,0 +1,13 @@
+﻿@model List<AppUser>
+@{
+    ViewData["Title"] = "Chat";
+}
+
+<h1>Chat</h1>
+
+<ul class="list-group">
+    @*@foreach (var item in Model)
+    {
+        <li class="list-group-item" data-id="@item.Id"><span class="online-status" style="color:@(item.ConnectionId==null?"red":"green")">@(item.ConnectionId==null?"offline":"online")</span> @item.Fullname</li>
+    }*@
+</ul>
